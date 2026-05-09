@@ -1,17 +1,17 @@
 # Frontend TODO
 
-Build the Noor-e-ada ecommerce frontend against the existing backend API.
+Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Foundation
 
-- [ ] Replace the default Vite starter screen with the Noor-e-ada app shell
-- [ ] Decide final frontend routing library and route structure
-- [ ] Add shared layout: header, navigation, footer, mobile menu
-- [ ] Add environment config for backend API base URL
-- [ ] Create API client with auth headers, refresh-token handling, and typed responses
-- [ ] Add shared loading, empty, error, and success states
-- [ ] Add reusable form controls and validation helpers
-- [ ] Define core domain types: user, address, category, product, variant, cart, order, review, wishlist
+- [x] Replace the default Vite starter screen with the Noor-e-ada app shell
+- [x] Decide final frontend routing library and route structure
+- [x] Add shared layout: header, navigation, footer, mobile menu
+- [x] Add environment config for backend API base URL
+- [x] Create API client with auth headers, refresh-token handling, and typed responses
+- [x] Add shared loading, empty, error, and success states
+- [x] Add reusable form controls and validation helpers
+- [x] Define core domain types: user, address, category, product, variant, cart, order, review, wishlist
 
 ## Auth
 
