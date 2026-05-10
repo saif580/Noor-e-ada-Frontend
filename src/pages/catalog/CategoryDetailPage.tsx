@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { catalogApi } from '../../api/catalog';
 import { ProductCard } from '../../components/catalog/ProductCard';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
+import { useWishlistState } from '../../hooks/useWishlistState';
 import { ApiError } from '../../lib/apiClient';
 import type { Category, Product } from '../../types/domain';
 
@@ -15,6 +16,7 @@ export function CategoryDetailPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const wishlist = useWishlistState();
 
   const loadCategory = useCallback(async () => {
     await Promise.resolve();
@@ -75,7 +77,14 @@ export function CategoryDetailPage() {
         <EmptyState title="No products in this collection" message="Try another collection or return to all products." />
       ) : (
         <div className="product-grid">
-          {products.map((product) => <ProductCard key={product.id} product={product} />)}
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              isWishlisted={wishlist.isWishlisted(product.id)}
+              onToggleWishlist={wishlist.toggleWishlist}
+            />
+          ))}
         </div>
       )}
     </section>

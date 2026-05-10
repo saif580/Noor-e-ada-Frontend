@@ -21,6 +21,7 @@ import { ProductListPage } from './pages/catalog/ProductListPage';
 import { CartPage } from './pages/cart/CartPage';
 import { CheckoutPage } from './pages/cart/CheckoutPage';
 import { OrderSuccessPage } from './pages/cart/OrderSuccessPage';
+import { WishlistPage } from './pages/wishlist/WishlistPage';
 
 import './App.css';
 
@@ -53,7 +54,7 @@ function App() {
               <Route path="/order-success/:id" element={<OrderSuccessPage />} />
               <Route path="/orders"   element={<OrdersPage />} />
               <Route path="/orders/:id" element={<OrderDetailsPage />} />
-              <Route path="/wishlist" element={<div className="auth-page"><p>Wishlist (coming soon)</p></div>} />
+              <Route path="/wishlist" element={<WishlistPage />} />
             </Route>
 
             {/* Admin-only routes */}

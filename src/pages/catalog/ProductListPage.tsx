@@ -4,6 +4,7 @@ import { catalogApi, type CatalogSort } from '../../api/catalog';
 import { ProductCard } from '../../components/catalog/ProductCard';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { FormField } from '../../components/ui/FormField';
+import { useWishlistState } from '../../hooks/useWishlistState';
 import { ApiError } from '../../lib/apiClient';
 import type { Category, Product } from '../../types/domain';
 
@@ -26,6 +27,7 @@ export function ProductListPage() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const wishlist = useWishlistState();
 
   const filters = useMemo(() => ({
     q: searchParams.get('q') ?? '',
@@ -169,7 +171,14 @@ export function ProductListPage() {
           {!loading && !error && products.length > 0 && (
             <>
               <div className="product-grid">
-                {products.map((product) => <ProductCard key={product.id} product={product} />)}
+                {products.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    isWishlisted={wishlist.isWishlisted(product.id)}
+                    onToggleWishlist={wishlist.toggleWishlist}
+                  />
+                ))}
               </div>
               <div className="catalog-pagination">
                 <button type="button" disabled={page <= 1} onClick={() => goToPage(page - 1)}>Previous</button>

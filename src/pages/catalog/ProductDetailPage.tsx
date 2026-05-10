@@ -4,6 +4,7 @@ import { cartApi } from '../../api/cart';
 import { catalogApi } from '../../api/catalog';
 import { getStockLabel, productPriceLabel } from '../../components/catalog/productUtils';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
+import { useWishlistState } from '../../hooks/useWishlistState';
 import { ApiError } from '../../lib/apiClient';
 import type { Product, ProductImage, ProductVariant } from '../../types/domain';
 
@@ -27,7 +28,9 @@ export function ProductDetailPage() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [cartMessage, setCartMessage] = useState('');
+  const [wishlistMessage, setWishlistMessage] = useState('');
   const [error, setError] = useState('');
+  const wishlist = useWishlistState();
 
   const selectedVariant = useMemo(
     () => product?.variants.find((variant) => variant.id === selectedVariantId) ?? product?.variants[0],
@@ -74,6 +77,18 @@ export function ProductDetailPage() {
       setError(getErrorMessage(err));
     } finally {
       setAdding(false);
+    }
+  }
+
+  async function toggleWishlist() {
+    if (!product) return;
+    setWishlistMessage('');
+    setError('');
+    try {
+      const saved = await wishlist.toggleWishlist(product.id);
+      setWishlistMessage(saved ? 'Saved to wishlist.' : 'Removed from wishlist.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : getErrorMessage(err));
     }
   }
 
@@ -172,6 +187,10 @@ export function ProductDetailPage() {
           )}
 
           {cartMessage && <p className="auth-success account-alert">{cartMessage}</p>}
+          {wishlistMessage && <p className="auth-success account-alert">{wishlistMessage}</p>}
+          <button type="button" className="button button-secondary product-detail-cta" onClick={() => void toggleWishlist()}>
+            {wishlist.isWishlisted(product.id) ? 'Remove from wishlist' : 'Save to wishlist'}
+          </button>
           <button type="button" className="button button-primary product-detail-cta" onClick={() => void addToCart()} disabled={isOutOfStock || adding}>
             {adding ? 'Adding...' : isOutOfStock ? 'Out of stock' : 'Add to cart'}
           </button>

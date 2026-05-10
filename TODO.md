@@ -76,10 +76,10 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Wishlist
 
-- [ ] Wishlist page wired to `GET /api/wishlist`
-- [ ] Add wishlist button wired to `POST /api/wishlist`
-- [ ] Remove wishlist item wired to `DELETE /api/wishlist/:id`
-- [ ] Reflect wishlist state on product cards and product detail page
+- [x] Wishlist page wired to `GET /api/wishlist`
+- [x] Add wishlist button wired to `POST /api/wishlist`
+- [x] Remove wishlist item wired to `DELETE /api/wishlist/:id`
+- [x] Reflect wishlist state on product cards and product detail page
 
 ## Reviews
 

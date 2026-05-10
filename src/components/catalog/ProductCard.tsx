@@ -5,10 +5,17 @@ import { ApiError } from '../../lib/apiClient';
 import type { Product } from '../../types/domain';
 import { getStockLabel, productPriceLabel } from './productUtils';
 
-export function ProductCard({ product }: { product: Product }) {
+interface ProductCardProps {
+  product: Product;
+  isWishlisted?: boolean;
+  onToggleWishlist?: (productId: string) => Promise<boolean>;
+}
+
+export function ProductCard({ product, isWishlisted = false, onToggleWishlist }: ProductCardProps) {
   const primaryImage = product.images.find((image) => image.isPrimary) ?? product.images[0];
   const stock = getStockLabel(product);
   const [adding, setAdding] = useState(false);
+  const [savingWishlist, setSavingWishlist] = useState(false);
   const [message, setMessage] = useState('');
 
   async function addFirstVariant() {
@@ -30,18 +37,47 @@ export function ProductCard({ product }: { product: Product }) {
     }
   }
 
+  async function toggleWishlist() {
+    if (!onToggleWishlist) {
+      setMessage('Sign in to save');
+      return;
+    }
+
+    setSavingWishlist(true);
+    setMessage('');
+    try {
+      const saved = await onToggleWishlist(product.id);
+      setMessage(saved ? 'Saved' : 'Removed');
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : 'Could not update');
+    } finally {
+      setSavingWishlist(false);
+    }
+  }
+
   return (
     <article className="product-card catalog-product-card">
-      <Link to={`/products/${product.id}`} className="catalog-product-media">
-        {primaryImage ? (
-          <img src={primaryImage.url} alt={primaryImage.altText ?? product.name} />
-        ) : (
-          <div className="catalog-product-placeholder" aria-hidden="true">
-            {product.name.slice(0, 1)}
-          </div>
-        )}
+      <div className="catalog-product-media">
+        <Link to={`/products/${product.id}`} className="catalog-product-image-link">
+          {primaryImage ? (
+            <img src={primaryImage.url} alt={primaryImage.altText ?? product.name} />
+          ) : (
+            <div className="catalog-product-placeholder" aria-hidden="true">
+              {product.name.slice(0, 1)}
+            </div>
+          )}
+        </Link>
         <span className={`catalog-stock catalog-stock-${stock.tone}`}>{stock.label}</span>
-      </Link>
+        <button
+          type="button"
+          className={`wishlist-chip${isWishlisted ? ' is-active' : ''}`}
+          onClick={() => void toggleWishlist()}
+          disabled={savingWishlist}
+          aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+        >
+          {isWishlisted ? 'Saved' : 'Save'}
+        </button>
+      </div>
       <div className="product-info">
         <span>{product.categoryName ?? 'Ethnic wear'}</span>
         <h3>
