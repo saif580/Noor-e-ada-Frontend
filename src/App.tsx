@@ -14,6 +14,10 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { AccountPage } from './pages/account/AccountPage';
 import { OrdersPage } from './pages/account/OrdersPage';
 import { OrderDetailsPage } from './pages/account/OrderDetailsPage';
+import { CategoryDetailPage } from './pages/catalog/CategoryDetailPage';
+import { CategoryListPage } from './pages/catalog/CategoryListPage';
+import { ProductDetailPage } from './pages/catalog/ProductDetailPage';
+import { ProductListPage } from './pages/catalog/ProductListPage';
 
 import './App.css';
 
@@ -33,6 +37,10 @@ function App() {
           {/* ── Main app shell ── */}
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
+            <Route path="/products" element={<ProductListPage />} />
+            <Route path="/products/:id" element={<ProductDetailPage />} />
+            <Route path="/collections" element={<CategoryListPage />} />
+            <Route path="/collections/:id" element={<CategoryDetailPage />} />
 
             {/* Customer-only routes */}
             <Route element={<ProtectedRoute />}>

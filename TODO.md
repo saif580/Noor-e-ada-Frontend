@@ -32,17 +32,17 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Catalog
 
-- [ ] Home page with featured ethnic wear sections
-- [ ] Category listing wired to `GET /api/categories`
-- [ ] Category detail page wired to `GET /api/categories/:categoryId`
-- [ ] Product listing wired to `GET /api/products`
-- [ ] Product search input using backend search query
-- [ ] Filters for category, price, size, color, and other backend-supported product filters
-- [ ] Sort controls for newest, price, and popularity
-- [ ] Product detail page wired to `GET /api/products/:productId`
-- [ ] Variant selector for size, color, material, price, compare-at price, and stock state
-- [ ] Product image gallery using backend product image data
-- [ ] Out-of-stock and low-stock UI states
+- [x] Home page with featured ethnic wear sections
+- [x] Category listing wired to `GET /api/categories`
+- [x] Category detail page wired to `GET /api/categories/:categoryId`
+- [x] Product listing wired to `GET /api/products`
+- [x] Product search input using backend search query
+- [x] Filters for category, price, size, color, and other backend-supported product filters
+- [x] Sort controls for newest, price, and popularity
+- [x] Product detail page wired to `GET /api/products/:productId`
+- [x] Variant selector for size, color, material, price, compare-at price, and stock state
+- [x] Product image gallery using backend product image data
+- [x] Out-of-stock and low-stock UI states
 
 ## Cart & Checkout
 
@@ -52,13 +52,15 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [ ] Remove item flow wired to `DELETE /api/cart/items/:id`
 - [ ] Clear cart flow wired to `DELETE /api/cart`
 - [ ] Coupon apply flow wired to `POST /api/cart/coupon`
-- [ ] Coupon remove flow wired to `DELETE /api/cart/coupon`
+- [ ] Coupon remove UX after backend adds a remove-coupon endpoint
 - [ ] Cart totals UI with subtotal, discount, shipping, and final total
 - [ ] Checkout address selection using saved addresses
 - [ ] Checkout stock reservation wired to `POST /api/inventory/reservations/checkout`
 - [ ] Place order flow wired to `POST /api/orders`
+- [ ] Razorpay order creation wired to `POST /api/payments/create-order`
+- [ ] Razorpay payment verification wired to `POST /api/payments/verify`
 - [ ] Order success page after checkout
-- [ ] Payment UI placeholder until backend payment provider is finalized
+- [ ] Payment failed/cancelled state for Razorpay checkout
 
 ## Account
 
@@ -89,14 +91,29 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 ## Admin
 
 - [ ] Admin dashboard shell
-- [ ] Admin product list wired to `GET /api/products`
+- [ ] Admin product list wired to `GET /api/products?all=true`
 - [ ] Create product form wired to `POST /api/products`
 - [ ] Update product form wired to `PUT /api/products/:productId`
+- [ ] Delete product action wired to `DELETE /api/products/:productId`
+- [ ] Bulk product active/inactive action wired to `PATCH /api/products/bulk/status`
+- [ ] Bulk product delete action wired to `DELETE /api/products/bulk`
 - [ ] Product image upload wired to `POST /api/products/images/upload`
 - [ ] Admin category create/update forms wired to `POST /api/categories` and `PUT /api/categories/:categoryId`
+- [ ] Admin category delete action wired to `DELETE /api/categories/:categoryId`
 - [ ] Low-stock inventory page wired to `GET /api/inventory/low-stock`
-- [ ] Admin order list page
+- [ ] Admin order list page wired to `GET /api/orders/admin`
+- [ ] Admin order filters for search, status, user, page, and limit
+- [ ] Admin order detail page wired to `GET /api/orders/admin/:id`
 - [ ] Update order status flow wired to `PATCH /api/orders/:id/status`
+- [ ] Admin user list wired to `GET /api/users/admin/users`
+- [ ] Admin user filters for search, role, page, and limit
+- [ ] Admin user role update wired to `PATCH /api/users/admin/users/:userId/role`
+- [ ] Admin user active/inactive toggle wired to `PATCH /api/users/admin/users/:userId/active`
+
+## Backend Integration Notes
+
+- [ ] Decide whether frontend needs a coupon remove action; backend currently has `POST /api/cart/coupon` but no remove-coupon route
+- [ ] Razorpay webhook is backend-only at `POST /api/payments/webhook`; no frontend screen needed unless admin payment logs are added
 
 ## Quality & Release
 

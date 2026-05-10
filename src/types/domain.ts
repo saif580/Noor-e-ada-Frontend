@@ -39,14 +39,23 @@ export interface Category {
   description?: string;
   parentId?: ID | null;
   imageUrl?: string;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ProductImage {
   id: ID;
+  productId?: ID;
+  variantId?: ID | null;
   url: string;
+  cloudinaryPublicId?: string;
+  width?: number | null;
+  height?: number | null;
   altText?: string;
   sortOrder: number;
   isPrimary: boolean;
+  createdAt?: string;
 }
 
 export interface ProductVariant {
@@ -57,8 +66,12 @@ export interface ProductVariant {
   color?: string;
   material?: string;
   price: number;
-  compareAtPrice?: number;
+  compareAtPrice?: number | null;
   stockQuantity: number;
+  lowStockThreshold?: number;
+  isActive?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Product {
@@ -67,12 +80,21 @@ export interface Product {
   slug: string;
   description?: string;
   categoryId?: ID;
+  categoryName?: string;
+  categorySlug?: string;
+  basePrice?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  totalInventory?: number;
+  isActive?: boolean;
+  popularityScore?: number;
   averageRating?: number;
   reviewCount?: number;
   images: ProductImage[];
   variants: ProductVariant[];
   attributes?: Record<string, string>;
   createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CartItem {
