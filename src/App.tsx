@@ -1,12 +1,52 @@
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
 import { AppLayout } from './components/layout/AppLayout';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { AdminRoute } from './components/auth/AdminRoute';
+
 import { HomePage } from './pages/HomePage';
+import { LoginPage } from './pages/auth/LoginPage';
+import { RegisterPage } from './pages/auth/RegisterPage';
+import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
+import { ResendVerificationPage } from './pages/auth/ResendVerificationPage';
+import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
+import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+
 import './App.css';
 
 function App() {
   return (
-    <AppLayout>
-      <HomePage />
-    </AppLayout>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          {/* ── Standalone auth pages (no AppLayout) ── */}
+          <Route path="/login"                element={<LoginPage />} />
+          <Route path="/register"             element={<RegisterPage />} />
+          <Route path="/verify-email"         element={<VerifyEmailPage />} />
+          <Route path="/resend-verification"  element={<ResendVerificationPage />} />
+          <Route path="/forgot-password"      element={<ForgotPasswordPage />} />
+          <Route path="/reset-password"       element={<ResetPasswordPage />} />
+
+          {/* ── Main app shell ── */}
+          <Route element={<AppLayout />}>
+            <Route path="/" element={<HomePage />} />
+
+            {/* Customer-only routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/account"  element={<div className="auth-page"><p>Account (coming soon)</p></div>} />
+              <Route path="/orders"   element={<div className="auth-page"><p>Orders (coming soon)</p></div>} />
+              <Route path="/wishlist" element={<div className="auth-page"><p>Wishlist (coming soon)</p></div>} />
+              <Route path="/checkout" element={<div className="auth-page"><p>Checkout (coming soon)</p></div>} />
+            </Route>
+
+            {/* Admin-only routes */}
+            <Route element={<AdminRoute />}>
+              <Route path="/admin" element={<div className="auth-page"><p>Admin (coming soon)</p></div>} />
+            </Route>
+          </Route>
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

@@ -1,6 +1,8 @@
-import { useEffect, useState, type ReactNode } from 'react';
-import logoMark from '../../assets/noor-logo-mark.svg';
+import { useEffect, useState } from 'react';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
 import { footerNavigation, mainNavigation } from '../../routes/appRoutes';
+import headerLogo from '../../assets/logo.svg';
 
 const MARQUEE_ITEMS = [
   'Handcrafted Ethnic Wear',
@@ -13,14 +15,12 @@ const MARQUEE_ITEMS = [
   'Easy 7-Day Returns',
 ] as const;
 
-interface AppLayoutProps {
-  children: ReactNode;
-  cartCount?: number;
-}
+export function AppLayout({ cartCount = 0 }: Readonly<{ cartCount?: number }>) {
+  const { user, isAuthenticated, logout } = useAuth();
+  const navigate = useNavigate();
 
-export function AppLayout({ children, cartCount = 0 }: AppLayoutProps) {
   const [scrollPct, setScrollPct] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen]   = useState(false);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -45,6 +45,11 @@ export function AppLayout({ children, cartCount = 0 }: AppLayoutProps) {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
   return (
     <div className="site-shell">
       <div
@@ -54,47 +59,67 @@ export function AppLayout({ children, cartCount = 0 }: AppLayoutProps) {
       />
 
       <header className="top-bar">
-        <a href="/" className="brand-link" aria-label="Noor-e-ada home">
-          <img src={logoMark} alt="" className="brand-mark" />
-          <span className="brand-name">Noor-e-ada</span>
-        </a>
+        <Link to="/" className="brand-link" aria-label="Noor-e-ada home">
+          <img src={headerLogo} alt="" className="brand-mark" />
+        </Link>
 
         <nav className="main-nav" aria-label="Main navigation">
           {mainNavigation.map((item) => (
-            <a key={item.href} href={item.href}>
-              {item.label}
-            </a>
+            <Link key={item.href} to={item.href}>{item.label}</Link>
           ))}
         </nav>
 
         <div className="nav-actions" aria-label="Shopping actions">
-          <a href="/account" className="nav-desktop-only">Account</a>
-          <a href="/wishlist" className="nav-desktop-only">Wishlist</a>
-          <a href="/cart" className="cart-link">Cart <span>{cartCount}</span></a>
+          {isAuthenticated ? (
+            <>
+              <span className="nav-desktop-only nav-greeting">
+                Hi, {user?.firstName}
+              </span>
+              <Link to="/account" className="nav-desktop-only">Account</Link>
+              <Link to="/wishlist" className="nav-desktop-only">Wishlist</Link>
+            </>
+          ) : (
+            <Link to="/login" className="nav-desktop-only">Sign in</Link>
+          )}
+          <Link to="/cart" className="cart-link">
+            Cart <span>{cartCount}</span>
+          </Link>
         </div>
 
         <button
           type="button"
           className={`hamburger${menuOpen ? ' is-open' : ''}`}
-          onClick={() => setMenuOpen((isOpen) => !isOpen)}
+          onClick={() => setMenuOpen((o) => !o)}
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={menuOpen}
         >
-          <span />
-          <span />
-          <span />
+          <span /><span /><span />
         </button>
       </header>
 
       {menuOpen && (
         <nav className="mobile-nav" aria-label="Mobile navigation">
           {mainNavigation.map((item) => (
-            <a key={item.href} href={item.href} onClick={closeMenu}>
-              {item.label}
-            </a>
+            <Link key={item.href} to={item.href} onClick={closeMenu}>{item.label}</Link>
           ))}
-          <a href="/account" onClick={closeMenu}>Account</a>
-          <a href="/wishlist" onClick={closeMenu}>Wishlist</a>
+          {isAuthenticated ? (
+            <>
+              <Link to="/account"  onClick={closeMenu}>Account</Link>
+              <Link to="/wishlist" onClick={closeMenu}>Wishlist</Link>
+              <button
+                type="button"
+                onClick={() => { closeMenu(); void handleLogout(); }}
+                className="mobile-nav-logout"
+              >
+                Sign out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login"    onClick={closeMenu}>Sign in</Link>
+              <Link to="/register" onClick={closeMenu}>Create account</Link>
+            </>
+          )}
         </nav>
       )}
 
@@ -112,7 +137,9 @@ export function AppLayout({ children, cartCount = 0 }: AppLayoutProps) {
         </div>
       </div>
 
-      <main>{children}</main>
+      <main>
+        <Outlet />
+      </main>
 
       <footer className="site-footer reveal">
         <div>
@@ -121,10 +148,17 @@ export function AppLayout({ children, cartCount = 0 }: AppLayoutProps) {
         </div>
         <nav aria-label="Footer navigation">
           {footerNavigation.map((route) => (
-            <a key={route.path} href={route.path}>
-              {route.label}
-            </a>
+            <Link key={route.path} to={route.path}>{route.label}</Link>
           ))}
+          {isAuthenticated && (
+            <button
+              type="button"
+              onClick={() => void handleLogout()}
+              className="footer-logout-btn"
+            >
+              Sign out
+            </button>
+          )}
         </nav>
       </footer>
     </div>

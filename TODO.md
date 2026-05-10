@@ -15,17 +15,20 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Auth
 
-- [ ] Register page wired to `POST /api/auth/register`
-- [ ] Login page wired to `POST /api/auth/login`
-- [ ] Persist access token and refresh token safely on the client
-- [ ] Refresh session using `POST /api/auth/refresh`
-- [ ] Logout flow wired to `POST /api/auth/logout`
-- [ ] Email verification result page for `GET /api/auth/verify-email`
-- [ ] Resend verification form wired to `POST /api/auth/resend-verification`
-- [ ] Forgot password page wired to `POST /api/auth/forgot-password`
-- [ ] Reset password page wired to `POST /api/auth/reset-password`
-- [ ] Protected routes for customer account and checkout
-- [ ] Admin-only route guard using `GET /api/users/admin/access`
+- [x] Add auth service wrapper for register/login/logout/refresh
+- [x] Add `AuthProvider` with current user, auth status, login, register, logout
+- [x] Add backend-to-frontend user mapper
+- [x] Register page wired to `POST /api/auth/register`
+- [x] Login page wired to `POST /api/auth/login`
+- [x] Persist access token and refresh token safely on the client
+- [x] Refresh session using `POST /api/auth/refresh`
+- [x] Logout flow wired to `POST /api/auth/logout`
+- [x] Email verification result page for `GET /api/auth/verify-email`
+- [x] Resend verification form wired to `POST /api/auth/resend-verification`
+- [x] Forgot password page wired to `POST /api/auth/forgot-password`
+- [x] Reset password page wired to `POST /api/auth/reset-password`
+- [x] Protected routes for customer account and checkout
+- [x] Admin-only route guard using `GET /api/users/admin/access`
 
 ## Catalog
 
