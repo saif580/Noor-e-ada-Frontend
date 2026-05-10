@@ -102,8 +102,14 @@ export interface CartItem {
   productId: ID;
   variantId: ID;
   quantity: number;
+  unitPrice?: number;
+  lineTotal?: number;
   product: Product;
   variant: ProductVariant;
+  imageUrl?: string;
+  imageAltText?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CartTotals {
@@ -117,7 +123,18 @@ export interface Cart {
   id: ID;
   items: CartItem[];
   couponCode?: string;
+  coupon?: {
+    code: string;
+    type: string;
+    value: number;
+    minPurchaseAmount?: number;
+    freeShipping: boolean;
+    appliedAt?: string;
+  } | null;
   totals: CartTotals;
+  itemCount?: number;
+  uniqueItems?: number;
+  message?: string;
 }
 
 export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';

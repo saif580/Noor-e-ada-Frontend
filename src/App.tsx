@@ -18,6 +18,9 @@ import { CategoryDetailPage } from './pages/catalog/CategoryDetailPage';
 import { CategoryListPage } from './pages/catalog/CategoryListPage';
 import { ProductDetailPage } from './pages/catalog/ProductDetailPage';
 import { ProductListPage } from './pages/catalog/ProductListPage';
+import { CartPage } from './pages/cart/CartPage';
+import { CheckoutPage } from './pages/cart/CheckoutPage';
+import { OrderSuccessPage } from './pages/cart/OrderSuccessPage';
 
 import './App.css';
 
@@ -45,10 +48,12 @@ function App() {
             {/* Customer-only routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/account"  element={<AccountPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/order-success/:id" element={<OrderSuccessPage />} />
               <Route path="/orders"   element={<OrdersPage />} />
               <Route path="/orders/:id" element={<OrderDetailsPage />} />
               <Route path="/wishlist" element={<div className="auth-page"><p>Wishlist (coming soon)</p></div>} />
-              <Route path="/checkout" element={<div className="auth-page"><p>Checkout (coming soon)</p></div>} />
             </Route>
 
             {/* Admin-only routes */}

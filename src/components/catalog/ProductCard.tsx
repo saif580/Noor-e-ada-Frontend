@@ -1,10 +1,34 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { cartApi } from '../../api/cart';
+import { ApiError } from '../../lib/apiClient';
 import type { Product } from '../../types/domain';
 import { getStockLabel, productPriceLabel } from './productUtils';
 
 export function ProductCard({ product }: { product: Product }) {
   const primaryImage = product.images.find((image) => image.isPrimary) ?? product.images[0];
   const stock = getStockLabel(product);
+  const [adding, setAdding] = useState(false);
+  const [message, setMessage] = useState('');
+
+  async function addFirstVariant() {
+    const variant = product.variants.find((item) => item.isActive !== false && item.stockQuantity > 0);
+    if (!variant) {
+      setMessage('Out of stock');
+      return;
+    }
+
+    setAdding(true);
+    setMessage('');
+    try {
+      await cartApi.addItem(variant.id, 1);
+      setMessage('Added');
+    } catch (err) {
+      setMessage(err instanceof ApiError ? err.message : 'Could not add');
+    } finally {
+      setAdding(false);
+    }
+  }
 
   return (
     <article className="product-card catalog-product-card">
@@ -27,9 +51,15 @@ export function ProductCard({ product }: { product: Product }) {
           <strong>{productPriceLabel(product)}</strong>
           {product.reviewCount ? <small>{product.averageRating?.toFixed(1) ?? '0.0'} / 5</small> : null}
         </div>
-        <Link className="button button-secondary catalog-card-link" to={`/products/${product.id}`}>
-          View details
-        </Link>
+        <div className="catalog-card-actions">
+          <button type="button" onClick={() => void addFirstVariant()} disabled={adding || stock.tone === 'out'}>
+            {adding ? 'Adding...' : stock.tone === 'out' ? 'Out of stock' : 'Add to cart'}
+          </button>
+          <Link className="button button-secondary catalog-card-link" to={`/products/${product.id}`}>
+            View
+          </Link>
+        </div>
+        {message && <small className="catalog-card-message">{message}</small>}
       </div>
     </article>
   );

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { cartApi } from '../../api/cart';
 import { catalogApi } from '../../api/catalog';
 import { getStockLabel, productPriceLabel } from '../../components/catalog/productUtils';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
@@ -24,6 +25,8 @@ export function ProductDetailPage() {
   const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
   const [selectedVariantId, setSelectedVariantId] = useState('');
   const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState(false);
+  const [cartMessage, setCartMessage] = useState('');
   const [error, setError] = useState('');
 
   const selectedVariant = useMemo(
@@ -58,6 +61,21 @@ export function ProductDetailPage() {
     }, 0);
     return () => globalThis.clearTimeout(timer);
   }, [loadProduct]);
+
+  async function addToCart() {
+    if (!selectedVariant) return;
+    setAdding(true);
+    setCartMessage('');
+    setError('');
+    try {
+      await cartApi.addItem(selectedVariant.id, 1);
+      setCartMessage('Added to cart.');
+    } catch (err) {
+      setError(getErrorMessage(err));
+    } finally {
+      setAdding(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -153,8 +171,9 @@ export function ProductDetailPage() {
             </dl>
           )}
 
-          <button type="button" className="button button-primary product-detail-cta" disabled={isOutOfStock}>
-            {isOutOfStock ? 'Out of stock' : 'Add to cart'}
+          {cartMessage && <p className="auth-success account-alert">{cartMessage}</p>}
+          <button type="button" className="button button-primary product-detail-cta" onClick={() => void addToCart()} disabled={isOutOfStock || adding}>
+            {adding ? 'Adding...' : isOutOfStock ? 'Out of stock' : 'Add to cart'}
           </button>
         </div>
       </div>

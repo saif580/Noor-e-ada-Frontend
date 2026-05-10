@@ -148,7 +148,7 @@ function mapOrderItem(item: BackendOrderItem): OrderItem {
   };
 }
 
-function mapOrder(order: BackendOrder): Order {
+export function mapOrder(order: BackendOrder): Order {
   const subtotal = toNumber(order.subtotal);
   const discountAmount = toNumber(order.discount_amount);
   const total = toNumber(order.total);

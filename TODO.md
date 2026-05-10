@@ -46,21 +46,21 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Cart & Checkout
 
-- [ ] Cart page wired to `GET /api/cart`
-- [ ] Add-to-cart flow wired to `POST /api/cart/items`
-- [ ] Quantity update flow wired to `PUT /api/cart/items/:id`
-- [ ] Remove item flow wired to `DELETE /api/cart/items/:id`
-- [ ] Clear cart flow wired to `DELETE /api/cart`
-- [ ] Coupon apply flow wired to `POST /api/cart/coupon`
+- [x] Cart page wired to `GET /api/cart`
+- [x] Add-to-cart flow wired to `POST /api/cart/items`
+- [x] Quantity update flow wired to `PUT /api/cart/items/:id`
+- [x] Remove item flow wired to `DELETE /api/cart/items/:id`
+- [x] Clear cart flow wired to `DELETE /api/cart`
+- [x] Coupon apply flow wired to `POST /api/cart/coupon`
 - [ ] Coupon remove UX after backend adds a remove-coupon endpoint
-- [ ] Cart totals UI with subtotal, discount, shipping, and final total
-- [ ] Checkout address selection using saved addresses
-- [ ] Checkout stock reservation wired to `POST /api/inventory/reservations/checkout`
-- [ ] Place order flow wired to `POST /api/orders`
-- [ ] Razorpay order creation wired to `POST /api/payments/create-order`
-- [ ] Razorpay payment verification wired to `POST /api/payments/verify`
-- [ ] Order success page after checkout
-- [ ] Payment failed/cancelled state for Razorpay checkout
+- [x] Cart totals UI with subtotal, discount, shipping, and final total
+- [x] Checkout address selection using saved addresses
+- [x] Checkout stock reservation wired to `POST /api/inventory/reservations/checkout`
+- [x] Place order flow wired to `POST /api/orders`
+- [x] Razorpay order creation wired to `POST /api/payments/create-order`
+- [x] Razorpay payment verification wired to `POST /api/payments/verify`
+- [x] Order success page after checkout
+- [x] Payment failed/cancelled state for Razorpay checkout
 
 ## Account
 
