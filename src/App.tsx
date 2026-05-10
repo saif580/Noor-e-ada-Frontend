@@ -11,6 +11,9 @@ import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
 import { ResendVerificationPage } from './pages/auth/ResendVerificationPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { AccountPage } from './pages/account/AccountPage';
+import { OrdersPage } from './pages/account/OrdersPage';
+import { OrderDetailsPage } from './pages/account/OrderDetailsPage';
 
 import './App.css';
 
@@ -33,8 +36,9 @@ function App() {
 
             {/* Customer-only routes */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/account"  element={<div className="auth-page"><p>Account (coming soon)</p></div>} />
-              <Route path="/orders"   element={<div className="auth-page"><p>Orders (coming soon)</p></div>} />
+              <Route path="/account"  element={<AccountPage />} />
+              <Route path="/orders"   element={<OrdersPage />} />
+              <Route path="/orders/:id" element={<OrderDetailsPage />} />
               <Route path="/wishlist" element={<div className="auth-page"><p>Wishlist (coming soon)</p></div>} />
               <Route path="/checkout" element={<div className="auth-page"><p>Checkout (coming soon)</p></div>} />
             </Route>

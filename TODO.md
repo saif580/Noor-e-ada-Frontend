@@ -62,15 +62,15 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Account
 
-- [ ] Account profile page wired to `GET /api/users/me`
-- [ ] Edit profile form wired to `PUT /api/users/me`
-- [ ] Address book wired to `GET /api/users/addresses`
-- [ ] Create address form wired to `POST /api/users/addresses`
-- [ ] Update address form wired to `PUT /api/users/addresses/:addressId`
-- [ ] Delete address action wired to `DELETE /api/users/addresses/:addressId`
-- [ ] Default shipping and billing address controls
-- [ ] Order history page wired to `GET /api/orders`
-- [ ] Order details page wired to `GET /api/orders/:id`
+- [x] Account profile page wired to `GET /api/users/me`
+- [x] Edit profile form wired to `PUT /api/users/me`
+- [x] Address book wired to `GET /api/users/addresses`
+- [x] Create address form wired to `POST /api/users/addresses`
+- [x] Update address form wired to `PUT /api/users/addresses/:addressId`
+- [x] Delete address action wired to `DELETE /api/users/addresses/:addressId`
+- [x] Default shipping and billing address controls
+- [x] Order history page wired to `GET /api/orders`
+- [x] Order details page wired to `GET /api/orders/:id`
 
 ## Wishlist
 

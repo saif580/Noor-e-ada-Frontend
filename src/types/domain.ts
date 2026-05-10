@@ -10,6 +10,9 @@ export interface User {
   phone?: string;
   role: UserRole;
   isEmailVerified: boolean;
+  isMarketingOptIn?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Address {
@@ -25,6 +28,8 @@ export interface Address {
   country: string;
   isDefaultShipping: boolean;
   isDefaultBilling: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Category {
@@ -98,22 +103,41 @@ export type OrderStatus = 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'c
 export interface OrderItem {
   id: ID;
   productId: ID;
-  variantId: ID;
+  variantId?: ID;
   productName: string;
-  sku: string;
+  productSlug?: string;
+  sku?: string;
+  variantSku?: string;
+  variantColor?: string;
+  variantSize?: string;
+  variantMaterial?: string;
   quantity: number;
   unitPrice: number;
   total: number;
+  createdAt?: string;
 }
 
 export interface Order {
   id: ID;
+  userId?: ID;
+  orderNumber?: string;
   status: OrderStatus;
   items: OrderItem[];
   shippingAddress: Address;
   billingAddress?: Address;
   totals: CartTotals;
+  subtotal?: number;
+  discountAmount?: number;
+  total?: number;
+  coupon?: {
+    code: string;
+    type: string;
+    value: number;
+    freeShipping: boolean;
+  } | null;
+  placedAt?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface Review {
