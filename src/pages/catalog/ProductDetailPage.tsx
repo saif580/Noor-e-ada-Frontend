@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import { cartApi } from '../../api/cart';
 import { catalogApi } from '../../api/catalog';
 import { getStockLabel, productPriceLabel } from '../../components/catalog/productUtils';
+import { ProductReviews } from '../../components/catalog/ProductReviews';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { useWishlistState } from '../../hooks/useWishlistState';
 import { ApiError } from '../../lib/apiClient';
@@ -19,6 +20,18 @@ const getErrorMessage = (err: unknown) =>
 
 const variantLabel = (variant: ProductVariant) =>
   [variant.color, variant.size, variant.material].filter(Boolean).join(' / ') || variant.sku;
+
+const variantStockLabel = (variant: ProductVariant): string => {
+  if (variant.stockQuantity <= 0) return 'Out of stock';
+  if (variant.stockQuantity <= (variant.lowStockThreshold ?? 5)) return 'Low stock';
+  return 'Available';
+};
+
+const cartButtonLabel = (adding: boolean, outOfStock: boolean): string => {
+  if (adding) return 'Adding…';
+  if (outOfStock) return 'Out of stock';
+  return 'Add to cart';
+};
 
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -169,7 +182,7 @@ export function ProductDetailPage() {
                 >
                   <span>{variantLabel(variant)}</span>
                   <strong>{money.format(variant.price)}</strong>
-                  <small>{variant.stockQuantity <= 0 ? 'Out of stock' : variant.stockQuantity <= (variant.lowStockThreshold ?? 5) ? 'Low stock' : 'Available'}</small>
+                  <small>{variantStockLabel(variant)}</small>
                 </button>
               ))}
             </div>
@@ -192,10 +205,12 @@ export function ProductDetailPage() {
             {wishlist.isWishlisted(product.id) ? 'Remove from wishlist' : 'Save to wishlist'}
           </button>
           <button type="button" className="button button-primary product-detail-cta" onClick={() => void addToCart()} disabled={isOutOfStock || adding}>
-            {adding ? 'Adding...' : isOutOfStock ? 'Out of stock' : 'Add to cart'}
+            {cartButtonLabel(adding, isOutOfStock)}
           </button>
         </div>
       </div>
+
+      {id && <ProductReviews productId={id} />}
     </section>
   );
 }

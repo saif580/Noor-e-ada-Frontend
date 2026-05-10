@@ -2701,3 +2701,300 @@ output.auth-success {
   display: block;
   margin-bottom: 4px;
 }
+
+/* ══════════════════════════════════════════
+   REVIEWS
+══════════════════════════════════════════ */
+
+.product-reviews {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 56px 48px 72px;
+  border-top: 1px solid #eadccb;
+}
+
+.product-reviews-heading {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 500;
+  color: #251c17;
+  margin: 0 0 28px;
+}
+
+/* ── Rating summary ── */
+.rating-summary {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 24px 28px;
+  background: #fffdf9;
+  border: 1px solid #eadccb;
+  border-radius: 8px;
+  margin-bottom: 36px;
+}
+
+.rating-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding-right: 28px;
+  border-right: 1px solid #eadccb;
+  flex-shrink: 0;
+}
+
+.rating-score-number {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 400;
+  color: #251c17;
+  line-height: 1;
+}
+
+.rating-score-count {
+  font-size: 12px;
+  color: #786a60;
+}
+
+.rating-summary-label {
+  font-size: 13px;
+  color: #786a60;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Stars ── */
+.star-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 1px;
+  font-size: var(--star-size, 18px);
+  line-height: 1;
+}
+
+.star-full  { color: #9b2f43; }
+.star-empty { color: #e4d0b7; }
+
+.star-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 3px;
+  line-height: 1;
+  color: #e4d0b7;
+  transition: color 0.12s, transform 0.1s;
+}
+.star-btn:hover,
+.star-btn.active   { color: #9b2f43; transform: scale(1.12); }
+.star-btn:focus-visible { outline: 2px solid #9b2f43; outline-offset: 2px; border-radius: 2px; }
+
+.star-picker-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #9b2f43;
+  margin-left: 8px;
+}
+
+/* ── Auth prompt ── */
+.review-auth-prompt {
+  padding: 16px 20px;
+  background: #fffdf9;
+  border: 1px dashed #c9ac83;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #786a60;
+  margin-bottom: 32px;
+}
+.review-auth-prompt a { color: #9b2f43; font-weight: 700; }
+.review-auth-prompt a:hover { text-decoration: underline; }
+
+/* ── Already reviewed ── */
+.review-already {
+  display: block;
+  padding: 14px 20px;
+  background: rgba(71, 114, 77, 0.07);
+  border: 1px solid rgba(71, 114, 77, 0.22);
+  border-radius: 6px;
+  color: #47724d;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 28px;
+}
+
+/* ── Review form ── */
+.review-form {
+  padding: 28px;
+  background: #fffaf3;
+  border: 1px solid #eadccb;
+  border-radius: 8px;
+  margin-bottom: 36px;
+}
+
+.review-form-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  color: #251c17;
+  margin: 0 0 22px;
+}
+
+.review-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.review-form-rating {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.review-form-rating-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5d5048;
+}
+
+.review-rating-error {
+  color: #9b2f43;
+  font-size: 12px;
+}
+
+.review-form-submit { align-self: flex-start; }
+
+/* Textarea field (mirrors .form-field) */
+.form-textarea {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  text-align: left;
+}
+
+.form-textarea > span {
+  color: #5d5048;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.form-textarea textarea {
+  min-height: 100px;
+  padding: 12px 16px;
+  border: 1px solid #d9c5aa;
+  border-radius: 4px;
+  background: #fffdf9;
+  color: #251c17;
+  font: inherit;
+  font-size: 15px;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-textarea textarea:focus {
+  outline: none;
+  border-color: #9b2f43;
+  box-shadow: 0 0 0 3px rgba(155, 47, 67, 0.13);
+}
+
+/* ── Review list ── */
+.review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ── Review card ── */
+.review-card {
+  padding: 22px 24px;
+  background: #fffdf9;
+  border: 1px solid #eadccb;
+  border-radius: 8px;
+  transition: box-shadow 0.2s;
+}
+.review-card:hover { box-shadow: 0 4px 18px rgba(80, 45, 35, 0.07); }
+
+.review-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.review-meta { display: flex; flex-direction: column; gap: 3px; }
+
+.review-author {
+  font-size: 14px;
+  font-weight: 700;
+  color: #251c17;
+}
+
+.review-date {
+  font-size: 12px;
+  color: #786a60;
+}
+
+.review-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  color: #251c17;
+  margin: 0 0 8px;
+}
+
+.review-body {
+  font-size: 14px;
+  color: #5d5048;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* ── Pagination ── */
+.reviews-pagination {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 32px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.reviews-pagination button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid #eadccb;
+  background: #fff;
+  color: #5d5048;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 4px;
+  font-family: inherit;
+  transition: border-color 0.18s, color 0.18s, background 0.18s;
+}
+.reviews-pagination button:hover:not(:disabled) { border-color: #9b2f43; color: #9b2f43; }
+.reviews-pagination button.is-current { background: #9b2f43; border-color: #9b2f43; color: #fff; }
+.reviews-pagination button:disabled   { opacity: 0.38; cursor: default; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .product-reviews { padding: 40px 20px 56px; }
+  .rating-summary  { flex-direction: column; gap: 14px; }
+  .rating-score    { border-right: none; padding-right: 0; border-bottom: 1px solid #eadccb; padding-bottom: 14px; width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .product-reviews { padding: 32px 16px 48px; }
+  .review-card     { padding: 16px 18px; }
+  .review-form     { padding: 20px; }
+}

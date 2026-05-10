@@ -83,10 +83,10 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Reviews
 
-- [ ] Product reviews section wired to `GET /api/products/:productId/reviews`
-- [ ] Submit review form wired to `POST /api/products/:productId/reviews`
-- [ ] Rating summary UI using average rating from product listing/details
-- [ ] Auth-required state for review submission
+- [x] Product reviews section wired to `GET /api/products/:productId/reviews`
+- [x] Submit review form wired to `POST /api/products/:productId/reviews`
+- [x] Rating summary UI using average rating from product listing/details
+- [x] Auth-required state for review submission
 
 ## Admin
 
