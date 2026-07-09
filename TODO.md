@@ -115,6 +115,28 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [ ] Decide whether frontend needs a coupon remove action; backend currently has `POST /api/cart/coupon` but no remove-coupon route
 - [ ] Razorpay webhook is backend-only at `POST /api/payments/webhook`; no frontend screen needed unless admin payment logs are added
 
+## UAT Deployment
+
+- [ ] Choose UAT frontend host, recommended: Vercel Hobby
+- [ ] Choose UAT backend host, recommended: Render free web service
+- [ ] Confirm UAT database, recommended: Supabase free Postgres
+- [ ] Create UAT frontend project from the frontend GitHub repo
+- [ ] Create UAT backend service from the backend GitHub repo
+- [ ] Configure frontend UAT env: `VITE_API_BASE_URL=https://<uat-backend>/api`
+- [ ] Configure backend UAT env: `APP_ENV=uat`
+- [ ] Configure backend UAT env: `APP_BASE_URL=https://<uat-backend>`
+- [ ] Configure backend UAT env: `FRONTEND_URL=https://<uat-frontend>`
+- [ ] Configure backend UAT secrets: database, JWT, refresh JWT, Cloudinary, Razorpay, and email
+- [ ] Add backend CORS allowlist for the UAT frontend domain
+- [ ] Verify backend health endpoint after deploy: `GET /api/health`
+- [ ] Verify frontend build and routing on direct page refresh
+- [ ] Seed or create one verified UAT customer login
+- [ ] Seed or create starter UAT categories, products, variants, images, and inventory
+- [ ] Run UAT smoke test: register, verify/login, browse catalog, add to cart, checkout, wishlist, review
+- [ ] Run UAT admin smoke test after admin UI exists
+- [ ] Configure Razorpay test mode keys and webhook URL for UAT
+- [ ] Document UAT URLs, test credentials, env var names, and rollback steps
+
 ## Quality & Release
 
 - [ ] Add frontend `.env.example`
