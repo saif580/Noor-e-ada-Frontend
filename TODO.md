@@ -112,29 +112,32 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Backend Integration Notes
 
-- [ ] Decide whether frontend needs a coupon remove action; backend currently has `POST /api/cart/coupon` but no remove-coupon route
+- [x] Coupon remove action is supported by backend at `DELETE /api/cart/coupon`
 - [ ] Razorpay webhook is backend-only at `POST /api/payments/webhook`; no frontend screen needed unless admin payment logs are added
 
 ## UAT Deployment
 
-- [ ] Choose UAT frontend host, recommended: Vercel Hobby
-- [ ] Choose UAT backend host, recommended: Render free web service
-- [ ] Confirm UAT database, recommended: Supabase free Postgres
-- [ ] Create UAT frontend project from the frontend GitHub repo
-- [ ] Create UAT backend service from the backend GitHub repo
-- [ ] Configure frontend UAT env: `VITE_API_BASE_URL=https://<uat-backend>/api`
-- [ ] Configure backend UAT env: `APP_ENV=uat`
-- [ ] Configure backend UAT env: `APP_BASE_URL=https://<uat-backend>`
+- [x] Choose UAT frontend host: Vercel Hobby
+- [x] Choose UAT backend host: Render free web service
+- [x] Confirm UAT database: Supabase Postgres
+- [x] Create UAT frontend project from the frontend GitHub repo
+- [x] Create UAT backend service from the backend GitHub repo
+- [x] Configure frontend UAT branch tracking from `uat`
+- [x] Configure frontend UAT env: `VITE_API_BASE_URL=https://noor-e-ada-backend-uat.onrender.com/api`
+- [x] Configure backend UAT env: `APP_ENV=uat`
+- [x] Configure backend UAT env: `APP_BASE_URL=https://noor-e-ada-backend-uat.onrender.com`
 - [ ] Configure backend UAT env: `FRONTEND_URL=https://<uat-frontend>`
-- [ ] Configure backend UAT secrets: database, JWT, refresh JWT, Cloudinary, Razorpay, and email
-- [ ] Add backend CORS allowlist for the UAT frontend domain
-- [ ] Verify backend health endpoint after deploy: `GET /api/health`
+- [x] Configure backend UAT secrets: database, JWT, refresh JWT, Cloudinary, Razorpay, and email
+- [x] Add backend CORS allowlist support for the UAT frontend domain
+- [x] Add Vercel SPA rewrite config for direct route refreshes
+- [x] Fix Vercel Linux install by removing macOS-only Rolldown binding from direct dependencies
+- [x] Verify backend service is live on Render
 - [ ] Verify frontend build and routing on direct page refresh
 - [ ] Seed or create one verified UAT customer login
 - [ ] Seed or create starter UAT categories, products, variants, images, and inventory
 - [ ] Run UAT smoke test: register, verify/login, browse catalog, add to cart, checkout, wishlist, review
 - [ ] Run UAT admin smoke test after admin UI exists
-- [ ] Configure Razorpay test mode keys and webhook URL for UAT
+- [x] Configure Razorpay test mode keys and webhook URL for UAT
 - [ ] Document UAT URLs, test credentials, env var names, and rollback steps
 
 ## Quality & Release

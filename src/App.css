@@ -802,8 +802,15 @@
   text-transform: uppercase;
 }
 
+.form-field-control {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .form-field input,
 .newsletter-section input {
+  width: 100%;
   min-width: 0;
   min-height: 50px;
   padding: 0 16px;
@@ -812,6 +819,32 @@
   background: #fffdf9;
   color: #251c17;
   font: inherit;
+}
+
+.form-field-control-password input {
+  padding-right: 76px;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  min-width: 50px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: #9b2f43;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.password-toggle:hover,
+.password-toggle:focus-visible {
+  background: #f8ece6;
+  outline: none;
 }
 
 .form-field input:focus,
@@ -2360,14 +2393,36 @@
 .auth-submit { width: 100%; margin-top: 4px; }
 
 .auth-error {
-  background: rgba(155, 47, 67, 0.07);
-  border: 1px solid rgba(155, 47, 67, 0.22);
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px 1fr;
+  align-items: start;
+  gap: 12px;
+  background: #fff4ef;
+  border: 1px solid #e3b9ad;
+  border-left: 4px solid #9b2f43;
   border-radius: 6px;
-  padding: 12px 16px;
-  color: #9b2f43;
-  font-size: 13px;
-  line-height: 1.5;
-  margin-bottom: 4px;
+  box-shadow: 0 12px 28px rgba(155, 47, 67, 0.12);
+  padding: 14px 16px 14px 14px;
+  color: #6f2031;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.45;
+  margin: 0 0 8px;
+}
+
+.auth-error::before {
+  content: '!';
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #9b2f43;
+  color: #fffaf3;
+  font-size: 15px;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .auth-success {
@@ -2469,10 +2524,12 @@
    REGISTER PAGE — split-panel layout
 ══════════════════════════════════════════ */
 .register-page {
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 720px;
   display: flex;
   align-items: stretch;
   background: #fff;
+  overflow: hidden;
 }
 
 /* ── Left brand panel ── */
@@ -2480,7 +2537,8 @@
   position: sticky;
   top: 0;
   flex: 0 0 420px;
-  min-height: 100vh;
+  height: 100vh;
+  min-height: 720px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2620,11 +2678,18 @@
 }
 
 @media (max-width: 768px) {
-  .register-page { flex-direction: column; background: #fffaf3; }
+  .register-page {
+    height: auto;
+    min-height: 100vh;
+    flex-direction: column;
+    background: #fffaf3;
+    overflow: visible;
+  }
 
   .register-brand {
     position: static;
     flex: none;
+    height: auto;
     min-height: auto;
     padding: 40px 24px 36px;
     border-bottom: 1px solid #eadccb;
