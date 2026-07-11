@@ -6,6 +6,9 @@ import { AdminRoute } from './components/auth/AdminRoute';
 
 import { HomePage } from './pages/HomePage';
 import { ContactPage } from './pages/ContactPage';
+import { ReturnsPage } from './pages/ReturnsPage';
+import { ShippingPage } from './pages/ShippingPage';
+import { SizeGuidePage } from './pages/SizeGuidePage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
@@ -69,6 +72,9 @@ function App() {
             <Route path="/collections" element={<CategoryListPage />} />
             <Route path="/collections/:id" element={<CategoryDetailPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/shipping" element={<ShippingPage />} />
+            <Route path="/returns" element={<ReturnsPage />} />
+            <Route path="/size-guide" element={<SizeGuidePage />} />
 
             {/* Customer-only routes */}
             <Route element={<ProtectedRoute />}>

@@ -1706,6 +1706,114 @@
   font-weight: 800;
 }
 
+/* ─── INFO PAGES ───────────────────────── */
+.info-page {
+  max-width: 1120px;
+}
+
+.info-heading {
+  max-width: 760px;
+}
+
+.info-grid,
+.size-guide-layout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.size-guide-layout {
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.7fr);
+}
+
+.info-card,
+.info-note {
+  border: 1px solid #eadccb;
+  border-radius: 8px;
+  background: #fffdf9;
+  box-shadow: 0 14px 38px rgba(80, 45, 35, 0.07);
+}
+
+.info-card {
+  padding: 26px;
+}
+
+.info-card h2 {
+  margin: 0 0 12px;
+  color: #251c17;
+  font-family: var(--font-display);
+  font-size: 29px;
+  font-weight: 500;
+  line-height: 1.1;
+}
+
+.info-card p,
+.info-list {
+  margin: 0;
+  color: #786a60;
+}
+
+.info-note {
+  margin-top: 22px;
+  padding: 22px 24px;
+  background: #f8ece6;
+}
+
+.info-note strong {
+  display: block;
+  color: #251c17;
+  font-size: 16px;
+}
+
+.info-note p {
+  margin: 6px 0 0;
+  color: #786a60;
+}
+
+.info-list {
+  display: grid;
+  gap: 12px;
+  padding-left: 18px;
+}
+
+.size-table-card {
+  overflow: hidden;
+}
+
+.size-table-wrap {
+  overflow-x: auto;
+}
+
+.size-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 520px;
+}
+
+.size-table th,
+.size-table td {
+  border-bottom: 1px solid #eadccb;
+  padding: 13px 12px;
+  text-align: left;
+}
+
+.size-table th {
+  color: #9b2f43;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.size-table td {
+  color: #251c17;
+  font-weight: 700;
+}
+
+.size-table tr:last-child td {
+  border-bottom: 0;
+}
+
 .product-detail-layout {
   display: grid;
   grid-template-columns: minmax(420px, 0.92fr) minmax(0, 1.08fr);
@@ -2378,6 +2486,8 @@
   .catalog-layout,
   .product-detail-layout,
   .contact-grid,
+  .info-grid,
+  .size-guide-layout,
   .cart-layout,
   .checkout-layout {
     grid-template-columns: 1fr;
@@ -2479,6 +2589,10 @@
     grid-template-columns: 1fr;
   }
   .contact-panel {
+    padding: 22px;
+  }
+  .info-card,
+  .info-note {
     padding: 22px;
   }
   .contact-support-band {
