@@ -20,6 +20,7 @@ export function BestsellersSection() {
             style={{ '--delay': `${index * 80}ms` } as CSSProperties}
           >
             <div className={`product-image ${product.color}`}>
+              <img src={product.image} alt={product.name} loading="lazy" />
               <span className="product-badge">{product.badge}</span>
             </div>
             <div className="product-info">

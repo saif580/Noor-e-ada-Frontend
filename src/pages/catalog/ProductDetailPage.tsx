@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { cartApi } from '../../api/cart';
 import { catalogApi } from '../../api/catalog';
-import { getStockLabel, productPriceLabel } from '../../components/catalog/productUtils';
+import { getProductImageUrl, getStockLabel, productPriceLabel } from '../../components/catalog/productUtils';
 import { ProductReviews } from '../../components/catalog/ProductReviews';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { useWishlistState } from '../../hooks/useWishlistState';
@@ -123,17 +123,14 @@ export function ProductDetailPage() {
 
   const stock = getStockLabel(product);
   const isOutOfStock = !selectedVariant || selectedVariant.stockQuantity <= 0;
+  const selectedImageUrl = getProductImageUrl(product, selectedImage?.url);
 
   return (
     <section className="catalog-page">
       <div className="product-detail-layout">
         <div className="product-gallery">
           <div className="product-gallery-main">
-            {selectedImage ? (
-              <img src={selectedImage.url} alt={selectedImage.altText ?? product.name} />
-            ) : (
-              <div className="catalog-product-placeholder" aria-hidden="true">{product.name.slice(0, 1)}</div>
-            )}
+            <img src={selectedImageUrl} alt={selectedImage?.altText ?? product.name} />
           </div>
 
           {product.images.length > 1 && (
@@ -146,7 +143,7 @@ export function ProductDetailPage() {
                   onClick={() => setSelectedImage(image)}
                   aria-label={`Show ${image.altText ?? product.name}`}
                 >
-                  <img src={image.url} alt="" />
+                  <img src={getProductImageUrl(product, image.url)} alt="" />
                 </button>
               ))}
             </div>

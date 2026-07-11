@@ -2,9 +2,9 @@ import type { CSSProperties, RefObject } from 'react';
 import { PARTICLES } from '../../data/home';
 
 interface HeroSectionProps {
-  metricsRef: RefObject<HTMLDListElement | null>;
-  countDesigns: number;
-  countRating: string;
+  readonly metricsRef: RefObject<HTMLDListElement | null>;
+  readonly countDesigns: number;
+  readonly countRating: string;
 }
 
 export function HeroSection({ metricsRef, countDesigns, countRating }: HeroSectionProps) {
@@ -55,14 +55,17 @@ export function HeroSection({ metricsRef, countDesigns, countRating }: HeroSecti
           />
         ))}
         <div className="showcase-card showcase-large">
+          <img className="showcase-img" src="/sample-products/home-zari-embroidered-lehenga.jpg" alt="" aria-hidden="true" />
           <span>Festive Edit</span>
           <strong>Up to 30% off</strong>
         </div>
         <div className="showcase-card showcase-small top">
+          <img className="showcase-img" src="/sample-products/home-chikankari-anarkali-set.jpg" alt="" aria-hidden="true" />
           <span>New</span>
           <strong>Pastel Anarkalis</strong>
         </div>
         <div className="showcase-card showcase-small bottom">
+          <img className="showcase-img" src="/sample-products/home-pearl-kundan-choker.jpg" alt="" aria-hidden="true" />
           <span>Trending</span>
           <strong>Kundan Sets</strong>
         </div>

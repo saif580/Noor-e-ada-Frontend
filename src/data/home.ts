@@ -9,10 +9,10 @@ export const PARTICLES = [
 ] as const;
 
 export const CATEGORIES = [
-  { name: 'Festive Sarees', count: '84 styles', tone: 'rose', href: '/collections/festive-sarees' },
-  { name: 'Anarkali Sets', count: '52 styles', tone: 'sage', href: '/collections/anarkali-sets' },
-  { name: 'Bridal Edit', count: '36 styles', tone: 'gold', href: '/collections/bridal' },
-  { name: 'Jewellery', count: '70 styles', tone: 'ivory', href: '/collections/jewellery' },
+  { name: 'Festive Sarees', count: '84 styles', tone: 'rose', href: '/collections/festive-sarees', image: '/sample-products/home-banarasi-silk-saree.jpg' },
+  { name: 'Anarkali Sets', count: '52 styles', tone: 'sage', href: '/collections/anarkali-sets', image: '/sample-products/home-chikankari-anarkali-set.jpg' },
+  { name: 'Bridal Edit', count: '36 styles', tone: 'gold', href: '/collections/bridal', image: '/sample-products/home-zari-embroidered-lehenga.jpg' },
+  { name: 'Jewellery', count: '70 styles', tone: 'ivory', href: '/collections/jewellery', image: '/sample-products/home-pearl-kundan-choker.jpg' },
 ] as const;
 
 export const PRODUCTS = [
@@ -23,6 +23,7 @@ export const PRODUCTS = [
     oldPrice: '₹22,999',
     badge: 'Bestseller',
     color: 'product-ruby',
+    image: '/sample-products/home-zari-embroidered-lehenga.jpg',
   },
   {
     name: 'Chikankari Anarkali Set',
@@ -31,6 +32,7 @@ export const PRODUCTS = [
     oldPrice: '₹9,499',
     badge: 'New',
     color: 'product-cream',
+    image: '/sample-products/home-chikankari-anarkali-set.jpg',
   },
   {
     name: 'Banarasi Silk Saree',
@@ -39,6 +41,7 @@ export const PRODUCTS = [
     oldPrice: '₹15,499',
     badge: 'Limited',
     color: 'product-emerald',
+    image: '/sample-products/home-banarasi-silk-saree.jpg',
   },
   {
     name: 'Pearl Kundan Choker',
@@ -47,6 +50,7 @@ export const PRODUCTS = [
     oldPrice: '₹4,199',
     badge: 'Trending',
     color: 'product-blush',
+    image: '/sample-products/home-pearl-kundan-choker.jpg',
   },
 ] as const;
 

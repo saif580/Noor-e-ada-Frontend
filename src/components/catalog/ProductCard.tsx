@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { cartApi } from '../../api/cart';
 import { ApiError } from '../../lib/apiClient';
 import type { Product } from '../../types/domain';
-import { getStockLabel, productPriceLabel } from './productUtils';
+import { getProductImageUrl, getStockLabel, productPriceLabel } from './productUtils';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +13,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product, isWishlisted = false, onToggleWishlist }: ProductCardProps) {
   const primaryImage = product.images.find((image) => image.isPrimary) ?? product.images[0];
+  const imageUrl = getProductImageUrl(product, primaryImage?.url);
   const stock = getStockLabel(product);
   const [adding, setAdding] = useState(false);
   const [savingWishlist, setSavingWishlist] = useState(false);
@@ -59,13 +60,7 @@ export function ProductCard({ product, isWishlisted = false, onToggleWishlist }:
     <article className="product-card catalog-product-card">
       <div className="catalog-product-media">
         <Link to={`/products/${product.id}`} className="catalog-product-image-link">
-          {primaryImage ? (
-            <img src={primaryImage.url} alt={primaryImage.altText ?? product.name} />
-          ) : (
-            <div className="catalog-product-placeholder" aria-hidden="true">
-              {product.name.slice(0, 1)}
-            </div>
-          )}
+          <img src={imageUrl} alt={primaryImage?.altText ?? product.name} loading="lazy" />
         </Link>
         <span className={`catalog-stock catalog-stock-${stock.tone}`}>{stock.label}</span>
         <button
