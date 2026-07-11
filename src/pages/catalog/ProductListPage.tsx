@@ -18,7 +18,19 @@ const sortOptions: Array<{ value: CatalogSort; label: string }> = [
 const getErrorMessage = (err: unknown) =>
   err instanceof ApiError ? err.message : 'Could not load products. Please try again.';
 
-export function ProductListPage() {
+interface ProductListPageProps {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  defaultSort?: CatalogSort;
+}
+
+export function ProductListPage({
+  eyebrow = 'Ethnic wear catalog',
+  title = 'Products',
+  description = 'styles found across sarees, lehengas, anarkali sets, and accessories.',
+  defaultSort = 'newest',
+}: Readonly<ProductListPageProps>) {
   const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -36,9 +48,9 @@ export function ProductListPage() {
     maxPrice: searchParams.get('maxPrice') ?? '',
     sizes: searchParams.get('sizes') ?? '',
     colors: searchParams.get('colors') ?? '',
-    sort: (searchParams.get('sort') as CatalogSort | null) ?? 'newest',
+    sort: (searchParams.get('sort') as CatalogSort | null) ?? defaultSort,
     page: Number(searchParams.get('page') ?? 1),
-  }), [searchParams]);
+  }), [defaultSort, searchParams]);
 
   const [draft, setDraft] = useState(filters);
 
@@ -78,7 +90,7 @@ export function ProductListPage() {
     event?.preventDefault();
     const next = new URLSearchParams();
     Object.entries({ ...draft, page: 1 }).forEach(([key, value]) => {
-      if (value !== '' && value !== undefined && value !== 'newest') next.set(key, String(value));
+      if (value !== '' && value !== undefined && value !== defaultSort) next.set(key, String(value));
     });
     setSearchParams(next);
   }
@@ -159,9 +171,9 @@ export function ProductListPage() {
 
         <div className="catalog-results">
           <div className="account-heading catalog-results-heading">
-            <span className="eyebrow">Ethnic wear catalog</span>
-            <h1>Products</h1>
-            <p>{total} styles found across sarees, lehengas, anarkali sets, and accessories.</p>
+            <span className="eyebrow">{eyebrow}</span>
+            <h1>{title}</h1>
+            <p>{total} {description}</p>
           </div>
 
           {loading && <LoadingState title="Loading products" />}

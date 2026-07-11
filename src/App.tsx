@@ -5,6 +5,7 @@ import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { AdminRoute } from './components/auth/AdminRoute';
 
 import { HomePage } from './pages/HomePage';
+import { ContactPage } from './pages/ContactPage';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
@@ -42,9 +43,32 @@ function App() {
           <Route element={<AppLayout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/products" element={<ProductListPage />} />
+            <Route
+              path="/new-arrivals"
+              element={(
+                <ProductListPage
+                  eyebrow="Fresh from Noor-e-ada"
+                  title="New Arrivals"
+                  description="new styles ready for weddings, festivals, and everyday elegance."
+                  defaultSort="newest"
+                />
+              )}
+            />
+            <Route
+              path="/bestsellers"
+              element={(
+                <ProductListPage
+                  eyebrow="Customer favourites"
+                  title="Bestsellers"
+                  description="popular styles customers are saving, reviewing, and adding to cart."
+                  defaultSort="popularity"
+                />
+              )}
+            />
             <Route path="/products/:id" element={<ProductDetailPage />} />
             <Route path="/collections" element={<CategoryListPage />} />
             <Route path="/collections/:id" element={<CategoryDetailPage />} />
+            <Route path="/contact" element={<ContactPage />} />
 
             {/* Customer-only routes */}
             <Route element={<ProtectedRoute />}>

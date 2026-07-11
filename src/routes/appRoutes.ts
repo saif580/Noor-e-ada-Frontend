@@ -9,8 +9,10 @@ export interface AppRoute {
 
 export const appRoutes = [
   { path: '/', label: 'Home', access: 'public' },
+  { path: '/new-arrivals', label: 'New Arrivals', access: 'public', navGroup: 'main' },
   { path: '/products', label: 'Products', access: 'public', navGroup: 'main' },
   { path: '/collections', label: 'Collections', access: 'public', navGroup: 'main' },
+  { path: '/bestsellers', label: 'Bestsellers', access: 'public', navGroup: 'main' },
   { path: '/wishlist', label: 'Wishlist', access: 'customer', navGroup: 'account' },
   { path: '/cart', label: 'Cart', access: 'customer', navGroup: 'account' },
   { path: '/checkout', label: 'Checkout', access: 'customer' },
@@ -24,10 +26,10 @@ export const appRoutes = [
 ] satisfies AppRoute[];
 
 export const mainNavigation = [
-  { href: '#new-arrivals', label: 'New Arrivals' },
-  { href: '#collections', label: 'Collections' },
-  { href: '#bestsellers', label: 'Bestsellers' },
-  { href: '#contact', label: 'Contact' },
+  { href: '/new-arrivals', label: 'New Arrivals' },
+  { href: '/collections', label: 'Collections' },
+  { href: '/bestsellers', label: 'Bestsellers' },
+  { href: '/contact', label: 'Contact' },
 ] as const;
 
 export const footerNavigation = appRoutes.filter((route) => route.navGroup === 'footer');
