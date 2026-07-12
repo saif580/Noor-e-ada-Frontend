@@ -89,12 +89,11 @@ export function ProductDetailPage() {
     if (!selectedVariant) return;
     setAdding(true);
     setCartMessage('');
-    setError('');
     try {
       await cartApi.addItem(selectedVariant.id, 1);
       setCartMessage('Added to cart.');
     } catch (err) {
-      setError(getErrorMessage(err));
+      setCartMessage(getErrorMessage(err));
     } finally {
       setAdding(false);
     }
@@ -103,12 +102,11 @@ export function ProductDetailPage() {
   async function toggleWishlist() {
     if (!product) return;
     setWishlistMessage('');
-    setError('');
     try {
       const saved = await wishlist.toggleWishlist(product.id);
       setWishlistMessage(saved ? 'Saved to wishlist.' : 'Removed from wishlist.');
     } catch (err) {
-      setError(err instanceof Error ? err.message : getErrorMessage(err));
+      setWishlistMessage(err instanceof Error ? err.message : getErrorMessage(err));
     }
   }
 
