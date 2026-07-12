@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Alert } from '../../components/ui/Alert';
 import { authApi } from '../../api/auth';
 import { ApiError } from '../../lib/apiClient';
 import { FormField } from '../../components/ui/FormField';
@@ -21,9 +22,7 @@ export function ResetPasswordPage() {
         <div className="auth-card" style={{ textAlign: 'center' }}>
           <img src={logoMark} alt="Noor-e-ada" className="auth-logo" />
           <h1 className="auth-heading">Invalid link</h1>
-          <p className="auth-error" role="alert">
-            This password reset link is missing a token. Please request a new one.
-          </p>
+          <Alert message="This password reset link is missing a token. Please request a new one." type="error" />
           <br />
           <div className="auth-links">
             <Link to="/forgot-password">Request new reset link</Link>
@@ -65,7 +64,7 @@ export function ResetPasswordPage() {
         <h1 className="auth-heading">Set new password</h1>
         <p className="auth-sub">Choose a strong password for your account.</p>
 
-        {error && <p className="auth-error" role="alert">{error}</p>}
+        <Alert message={error} type="error" />
 
         <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <FormField

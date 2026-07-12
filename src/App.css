@@ -3243,10 +3243,14 @@
   margin-top: -6px;
 }
 
-/* output element matches .auth-success block style */
+/* output element display overrides (default is inline) */
 output.auth-success {
   display: block;
   margin-bottom: 4px;
+}
+
+output.auth-error {
+  display: grid;
 }
 
 /* ══════════════════════════════════════════

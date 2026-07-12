@@ -10,6 +10,7 @@ import {
   type ProductMediaItem,
 } from '../../components/catalog/productUtils';
 import { ProductReviews } from '../../components/catalog/ProductReviews';
+import { Alert } from '../../components/ui/Alert';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { useWishlistState } from '../../hooks/useWishlistState';
 import { ApiError } from '../../lib/apiClient';
@@ -213,8 +214,8 @@ export function ProductDetailPage() {
             </dl>
           )}
 
-          {cartMessage && <p className="auth-success account-alert">{cartMessage}</p>}
-          {wishlistMessage && <p className="auth-success account-alert">{wishlistMessage}</p>}
+          <Alert message={cartMessage} type="success" className="account-alert" />
+          <Alert message={wishlistMessage} type="success" className="account-alert" />
           <button type="button" className="button button-secondary product-detail-cta" onClick={() => void toggleWishlist()}>
             {wishlist.isWishlisted(product.id) ? 'Remove from wishlist' : 'Save to wishlist'}
           </button>

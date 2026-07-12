@@ -1,5 +1,6 @@
 import { type FormEvent, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Alert } from '../../components/ui/Alert';
 import { useAuth } from '../../hooks/useAuth';
 import { ApiError } from '../../lib/apiClient';
 import { FormField } from '../../components/ui/FormField';
@@ -92,7 +93,7 @@ export function LoginPage() {
             </output>
           )}
 
-          {error && <p className="auth-error" role="alert">{error}</p>}
+          <Alert message={error} type="error" />
 
           <form className="auth-form" onSubmit={handleSubmit} noValidate>
             <FormField

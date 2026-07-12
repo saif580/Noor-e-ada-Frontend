@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../api/cart';
 import { getProductImageUrl } from '../../components/catalog/productUtils';
+import { Alert } from '../../components/ui/Alert';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { FormField } from '../../components/ui/FormField';
 import { ApiError } from '../../lib/apiClient';
@@ -131,8 +132,8 @@ export function CartPage() {
         <p>Review your selected styles before reserving stock for checkout.</p>
       </div>
 
-      {error && <p className="auth-error account-alert" role="alert">{error}</p>}
-      {success && <p className="auth-success account-alert">{success}</p>}
+      <Alert message={error} type="error" className="account-alert" />
+      <Alert message={success} type="success" className="account-alert" />
 
       {isEmpty ? (
         <EmptyState

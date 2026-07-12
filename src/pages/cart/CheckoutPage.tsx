@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { accountApi } from '../../api/account';
 import { cartApi } from '../../api/cart';
+import { Alert } from '../../components/ui/Alert';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { ApiError } from '../../lib/apiClient';
 import type { Address, Cart, Order } from '../../types/domain';
@@ -238,8 +239,8 @@ export function CheckoutPage() {
         <p>Choose a saved address, reserve stock, place the order, then complete Razorpay test payment.</p>
       </div>
 
-      {error && <p className="auth-error account-alert" role="alert">{error}</p>}
-      {paymentStatus && <p className="auth-success account-alert">{paymentStatus}</p>}
+      <Alert message={error} type="error" className="account-alert" />
+      <Alert message={paymentStatus} type="success" className="account-alert" />
 
       <div className="checkout-layout">
         <div className="account-panel checkout-panel">

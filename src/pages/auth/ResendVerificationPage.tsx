@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Alert } from '../../components/ui/Alert';
 import { authApi } from '../../api/auth';
 import { FormField } from '../../components/ui/FormField';
 import logoMark from '../../assets/logo.svg';
@@ -35,13 +36,13 @@ export function ResendVerificationPage() {
         </p>
 
         {submitted ? (
-          <div className="auth-success" role="status">
+          <output className="auth-success">
             If an unverified account exists for that email, a new link has been sent.
             Please check your inbox (and spam folder).
-          </div>
+          </output>
         ) : (
           <>
-            {error && <p className="auth-error" role="alert">{error}</p>}
+            <Alert message={error} type="error" />
             <form className="auth-form" onSubmit={handleSubmit} noValidate>
               <FormField
                 label="Email address"

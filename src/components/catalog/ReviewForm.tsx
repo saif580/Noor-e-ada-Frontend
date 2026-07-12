@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import type { SubmitReviewPayload } from '../../api/reviews';
+import { Alert } from '../ui/Alert';
 import { FormField } from '../ui/FormField';
 import { StarRating } from './StarRating';
 
@@ -47,11 +48,7 @@ export function ReviewForm({
     <div className="review-form">
       <h3 className="review-form-title">Write a review</h3>
 
-      {submitError && (
-        <p className="auth-error" role="alert" style={{ marginBottom: '16px' }}>
-          {submitError}
-        </p>
-      )}
+      <Alert message={submitError} type="error" style={{ marginBottom: '16px' }} />
 
       <form className="review-form-fields" onSubmit={handleSubmit} noValidate>
         {/* Star picker */}

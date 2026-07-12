@@ -1,6 +1,7 @@
 import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { accountApi, addressToPayload, type AddressPayload, type UpdateProfilePayload } from '../../api/account';
+import { Alert } from '../../components/ui/Alert';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { FormField } from '../../components/ui/FormField';
 import { useAuth } from '../../hooks/useAuth';
@@ -208,8 +209,8 @@ export function AccountPage() {
         <p>Manage your profile, saved delivery addresses, and order activity.</p>
       </div>
 
-      {error && <p className="auth-error account-alert" role="alert">{error}</p>}
-      {success && <output className="auth-success account-alert">{success}</output>}
+      <Alert message={error} type="error" className="account-alert" />
+      <Alert message={success} type="success" className="account-alert" />
 
       <div className="account-grid">
         <form className="account-panel account-form" onSubmit={handleProfileSubmit}>
