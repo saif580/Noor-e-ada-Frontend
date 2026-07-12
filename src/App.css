@@ -1458,6 +1458,7 @@
 
 .catalog-product-media img,
 .product-gallery-main img,
+.product-gallery-main video,
 .product-thumbnails img {
   display: block;
   width: 100%;
@@ -1834,6 +1835,11 @@
   background: #fffdf9;
 }
 
+.product-gallery-main video {
+  min-height: 620px;
+  background: #251c17;
+}
+
 .product-thumbnails {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -1855,6 +1861,19 @@
   box-shadow: 0 0 0 3px rgba(155, 47, 67, 0.12);
 }
 
+.product-video-thumb {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  background: #251c17;
+  color: #fffdf9;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .product-detail-copy {
   padding-top: 10px;
 }
@@ -1870,9 +1889,10 @@
 
 .product-detail-copy > p {
   margin: 20px 0 0;
+  max-width: 620px;
   color: #67594f;
-  font-size: 17px;
-  line-height: 1.7;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
 .product-detail-price {
@@ -1997,10 +2017,12 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 86px;
   gap: 8px;
+  margin-top: auto;
 }
 
 .catalog-card-actions button {
   min-height: 42px;
+  margin-top: 0;
 }
 
 .catalog-card-message {
@@ -2259,10 +2281,10 @@
 
 .wishlist-card {
   display: grid;
-  grid-template-columns: 140px minmax(0, 1fr) auto;
-  gap: 20px;
+  grid-template-columns: 104px minmax(0, 1fr) auto;
+  gap: 16px;
   align-items: center;
-  padding: 18px;
+  padding: 14px;
   border: 1px solid #eadccb;
   border-radius: 8px;
   background: #fffdf9;
@@ -2278,7 +2300,7 @@
   background: linear-gradient(145deg, #e9b3a7, #9b2f43);
   color: #fff;
   font-family: var(--font-display);
-  font-size: 48px;
+  font-size: 38px;
   text-decoration: none;
 }
 
@@ -2297,10 +2319,10 @@
 }
 
 .wishlist-card h2 {
-  margin: 6px 0 8px;
+  margin: 5px 0 6px;
   color: #251c17;
   font-family: var(--font-display);
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 500;
 }
 
@@ -2313,11 +2335,22 @@
   color: #251c17;
 }
 
+.wishlist-card p {
+  display: -webkit-box;
+  margin: 0 0 8px;
+  overflow: hidden;
+  color: #786a60;
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
 .wishlist-card-actions {
   display: grid;
   justify-items: stretch;
   gap: 10px;
-  min-width: 170px;
+  min-width: 150px;
 }
 
 /* ─── SCROLL REVEAL ──────────────────────── */

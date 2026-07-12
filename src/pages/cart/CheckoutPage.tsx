@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { accountApi } from '../../api/account';
 import { cartApi } from '../../api/cart';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
-import { FormField } from '../../components/ui/FormField';
 import { ApiError } from '../../lib/apiClient';
 import type { Address, Cart, Order } from '../../types/domain';
 
@@ -14,7 +13,7 @@ const money = new Intl.NumberFormat('en-IN', {
 });
 
 const getErrorMessage = (err: unknown) =>
-  err instanceof ApiError ? err.message : 'Checkout failed. Please try again.';
+  err instanceof ApiError || err instanceof Error ? err.message : 'Checkout failed. Please try again.';
 
 interface PaymentOrder {
   razorpay_order_id: string;
@@ -24,6 +23,56 @@ interface PaymentOrder {
   order_number: string;
 }
 
+interface RazorpayResponse {
+  razorpay_order_id: string;
+  razorpay_payment_id: string;
+  razorpay_signature: string;
+}
+
+interface RazorpayOptions {
+  key: string;
+  amount: number;
+  currency: string;
+  name: string;
+  description: string;
+  order_id: string;
+  handler: (response: RazorpayResponse) => void;
+  theme: { color: string };
+  modal: { ondismiss: () => void };
+}
+
+interface RazorpayInstance {
+  open: () => void;
+}
+
+declare global {
+  interface Window {
+    Razorpay?: new (options: RazorpayOptions) => RazorpayInstance;
+  }
+}
+
+const loadRazorpayScript = () =>
+  new Promise<void>((resolve, reject) => {
+    if (window.Razorpay) {
+      resolve();
+      return;
+    }
+
+    const existingScript = document.querySelector<HTMLScriptElement>('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
+    if (existingScript) {
+      existingScript.addEventListener('load', () => resolve(), { once: true });
+      existingScript.addEventListener('error', () => reject(new Error('Could not load Razorpay checkout.')), { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Could not load Razorpay checkout.'));
+    document.body.appendChild(script);
+  });
+
 export function CheckoutPage() {
   const navigate = useNavigate();
   const [cart, setCart] = useState<Cart | null>(null);
@@ -32,11 +81,9 @@ export function CheckoutPage() {
   const [reservationExpiresAt, setReservationExpiresAt] = useState('');
   const [order, setOrder] = useState<Order | null>(null);
   const [paymentOrder, setPaymentOrder] = useState<PaymentOrder | null>(null);
-  const [paymentId, setPaymentId] = useState('');
-  const [paymentSignature, setPaymentSignature] = useState('');
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
-  const [verifying, setVerifying] = useState(false);
+  const [paying, setPaying] = useState(false);
   const [error, setError] = useState('');
 
   const loadCheckout = useCallback(async () => {
@@ -79,7 +126,9 @@ export function CheckoutPage() {
       setReservationExpiresAt(reservation.expires_at);
       const createdOrder = await cartApi.placeOrder(selectedAddressId);
       setOrder(createdOrder);
-      setPaymentOrder(await cartApi.createPaymentOrder(createdOrder.id));
+      const createdPaymentOrder = await cartApi.createPaymentOrder(createdOrder.id);
+      setPaymentOrder(createdPaymentOrder);
+      await openRazorpayCheckout(createdPaymentOrder);
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -87,21 +136,46 @@ export function CheckoutPage() {
     }
   }
 
-  async function verifyPayment() {
-    if (!paymentOrder) return;
-    setVerifying(true);
+  async function openRazorpayCheckout(createdPaymentOrder = paymentOrder) {
+    if (!createdPaymentOrder) return;
+    setPaying(true);
     setError('');
     try {
-      const verified = await cartApi.verifyPayment({
-        razorpayOrderId: paymentOrder.razorpay_order_id,
-        razorpayPaymentId: paymentId,
-        razorpaySignature: paymentSignature,
+      await loadRazorpayScript();
+      if (!window.Razorpay) throw new Error('Razorpay checkout is unavailable.');
+
+      const checkout = new window.Razorpay({
+        key: createdPaymentOrder.key_id,
+        amount: createdPaymentOrder.amount_paise,
+        currency: createdPaymentOrder.currency,
+        name: 'Noor-e-ada',
+        description: createdPaymentOrder.order_number,
+        order_id: createdPaymentOrder.razorpay_order_id,
+        theme: { color: '#9b2f43' },
+        modal: {
+          ondismiss: () => setPaying(false),
+        },
+        handler: (response) => {
+          void (async () => {
+            try {
+              const verified = await cartApi.verifyPayment({
+                razorpayOrderId: response.razorpay_order_id,
+                razorpayPaymentId: response.razorpay_payment_id,
+                razorpaySignature: response.razorpay_signature,
+              });
+              navigate(`/order-success/${verified.order_id}`);
+            } catch (err) {
+              setError(getErrorMessage(err));
+            } finally {
+              setPaying(false);
+            }
+          })();
+        },
       });
-      navigate(`/order-success/${verified.order_id}`);
+      checkout.open();
     } catch (err) {
       setError(getErrorMessage(err));
-    } finally {
-      setVerifying(false);
+      setPaying(false);
     }
   }
 
@@ -134,7 +208,7 @@ export function CheckoutPage() {
       <div className="account-heading">
         <span className="eyebrow">Secure checkout</span>
         <h1>Checkout</h1>
-        <p>Choose a saved address, reserve stock, place the order, then verify Razorpay payment.</p>
+        <p>Choose a saved address, reserve stock, place the order, then complete Razorpay test payment.</p>
       </div>
 
       {error && <p className="auth-error account-alert" role="alert">{error}</p>}
@@ -168,8 +242,8 @@ export function CheckoutPage() {
             </div>
           )}
 
-          <button type="button" className="button button-primary checkout-place-button" onClick={() => void placeOrder()} disabled={placing || !selectedAddressId || Boolean(paymentOrder)}>
-            {placing ? 'Placing order...' : paymentOrder ? 'Order placed' : 'Reserve stock and place order'}
+          <button type="button" className="button button-primary checkout-place-button" onClick={() => void placeOrder()} disabled={placing || paying || !selectedAddressId || Boolean(paymentOrder)}>
+            {placing || paying ? 'Opening payment...' : paymentOrder ? 'Order placed' : 'Place order and pay'}
           </button>
           {reservationExpiresAt && <p className="account-muted">Stock reserved until {new Date(reservationExpiresAt).toLocaleTimeString('en-IN')}.</p>}
         </div>
@@ -190,14 +264,10 @@ export function CheckoutPage() {
               <span>{paymentOrder.order_number}</span>
             </div>
             <p className="account-muted">
-              Use Razorpay order ID <strong>{paymentOrder.razorpay_order_id}</strong> for the checkout SDK. Amount: {money.format(paymentOrder.amount_paise / 100)}.
+              Amount: {money.format(paymentOrder.amount_paise / 100)}. Use Razorpay test card <strong>4111 1111 1111 1111</strong>, any future expiry, any CVV, and any OTP in test mode.
             </p>
-            <div className="address-form-grid payment-form-grid">
-              <FormField label="Razorpay payment ID" name="razorpayPaymentId" value={paymentId} onChange={(event) => setPaymentId(event.target.value)} />
-              <FormField label="Razorpay signature" name="razorpaySignature" value={paymentSignature} onChange={(event) => setPaymentSignature(event.target.value)} />
-            </div>
-            <button type="button" className="button button-primary" onClick={() => void verifyPayment()} disabled={verifying || !paymentId || !paymentSignature}>
-              {verifying ? 'Verifying...' : 'Verify payment'}
+            <button type="button" className="button button-primary" onClick={() => void openRazorpayCheckout()} disabled={paying}>
+              {paying ? 'Opening Razorpay...' : 'Pay with Razorpay'}
             </button>
           </div>
         )}

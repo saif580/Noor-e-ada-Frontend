@@ -2,12 +2,18 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { cartApi } from '../../api/cart';
 import { catalogApi } from '../../api/catalog';
-import { getProductImageUrl, getStockLabel, productPriceLabel } from '../../components/catalog/productUtils';
+import {
+  getProductDescription,
+  getProductMedia,
+  getStockLabel,
+  productPriceLabel,
+  type ProductMediaItem,
+} from '../../components/catalog/productUtils';
 import { ProductReviews } from '../../components/catalog/ProductReviews';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { useWishlistState } from '../../hooks/useWishlistState';
 import { ApiError } from '../../lib/apiClient';
-import type { Product, ProductImage, ProductVariant } from '../../types/domain';
+import type { Product, ProductVariant } from '../../types/domain';
 
 const money = new Intl.NumberFormat('en-IN', {
   style: 'currency',
@@ -36,7 +42,7 @@ const cartButtonLabel = (adding: boolean, outOfStock: boolean): string => {
 export function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
-  const [selectedImage, setSelectedImage] = useState<ProductImage | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<ProductMediaItem | null>(null);
   const [selectedVariantId, setSelectedVariantId] = useState('');
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
@@ -61,8 +67,9 @@ export function ProductDetailPage() {
     setError('');
     try {
       const freshProduct = await catalogApi.getProduct(id);
+      const media = getProductMedia(freshProduct);
       setProduct(freshProduct);
-      setSelectedImage(freshProduct.images[0] ?? null);
+      setSelectedMedia(media[0] ?? null);
       setSelectedVariantId(freshProduct.variants[0]?.id ?? '');
     } catch (err) {
       setError(getErrorMessage(err));
@@ -123,27 +130,39 @@ export function ProductDetailPage() {
 
   const stock = getStockLabel(product);
   const isOutOfStock = !selectedVariant || selectedVariant.stockQuantity <= 0;
-  const selectedImageUrl = getProductImageUrl(product, selectedImage?.url);
+  const mediaItems = getProductMedia(product);
+  const activeMedia = selectedMedia ?? mediaItems[0];
+  const productDescription = getProductDescription(product);
 
   return (
     <section className="catalog-page">
       <div className="product-detail-layout">
         <div className="product-gallery">
           <div className="product-gallery-main">
-            <img src={selectedImageUrl} alt={selectedImage?.altText ?? product.name} />
+            {activeMedia?.type === 'video' ? (
+              <video controls playsInline poster={activeMedia.poster}>
+                <source src={activeMedia.url} type="video/mp4" />
+              </video>
+            ) : (
+              <img src={activeMedia?.url} alt={activeMedia?.altText ?? product.name} />
+            )}
           </div>
 
-          {product.images.length > 1 && (
+          {mediaItems.length > 1 && (
             <div className="product-thumbnails">
-              {product.images.map((image) => (
+              {mediaItems.map((media) => (
                 <button
-                  key={image.id}
+                  key={media.id}
                   type="button"
-                  className={selectedImage?.id === image.id ? 'is-active' : ''}
-                  onClick={() => setSelectedImage(image)}
-                  aria-label={`Show ${image.altText ?? product.name}`}
+                  className={activeMedia?.id === media.id ? 'is-active' : ''}
+                  onClick={() => setSelectedMedia(media)}
+                  aria-label={`Show ${media.altText}`}
                 >
-                  <img src={getProductImageUrl(product, image.url)} alt="" />
+                  {media.type === 'video' ? (
+                    <span className="product-video-thumb">Video</span>
+                  ) : (
+                    <img src={media.url} alt="" />
+                  )}
                 </button>
               ))}
             </div>
@@ -154,7 +173,7 @@ export function ProductDetailPage() {
           <Link to="/products" className="account-back-link">Back to products</Link>
           <span className="eyebrow">{product.categoryName ?? 'Noor-e-ada'}</span>
           <h1>{product.name}</h1>
-          <p>{product.description ?? 'A thoughtfully crafted ethnic wear piece from Noor-e-ada.'}</p>
+          <p>{productDescription}</p>
 
           <div className="product-detail-price">
             <strong>{selectedVariant ? money.format(selectedVariant.price) : productPriceLabel(product)}</strong>

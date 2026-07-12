@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../api/cart';
+import { getProductImageUrl } from '../../components/catalog/productUtils';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { FormField } from '../../components/ui/FormField';
 import { ApiError } from '../../lib/apiClient';
@@ -145,7 +146,7 @@ export function CartPage() {
             {cart.items.map((item) => (
               <article className="cart-item" key={item.id}>
                 <Link to={`/products/${item.productId}`} className="cart-item-image">
-                  {item.imageUrl ? <img src={item.imageUrl} alt={item.imageAltText ?? item.product.name} /> : <span>{item.product.name.slice(0, 1)}</span>}
+                  <img src={getProductImageUrl(item.product, item.imageUrl)} alt={item.imageAltText ?? item.product.name} />
                 </Link>
                 <div>
                   <span>{[item.variant.color, item.variant.size, item.variant.material].filter(Boolean).join(' / ')}</span>
