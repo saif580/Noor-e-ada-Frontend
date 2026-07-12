@@ -17,6 +17,21 @@ const formatDate = (value: string) =>
 const getErrorMessage = (err: unknown) =>
   err instanceof ApiError ? err.message : 'Could not load this order. Please try again.';
 
+const statusSteps: Array<{ status: Order['status']; label: string }> = [
+  { status: 'pending', label: 'Order placed' },
+  { status: 'confirmed', label: 'Payment confirmed' },
+  { status: 'shipped', label: 'Shipped' },
+  { status: 'delivered', label: 'Delivered' },
+];
+
+const statusRank: Record<Order['status'], number> = {
+  pending: 0,
+  confirmed: 1,
+  shipped: 2,
+  delivered: 3,
+  cancelled: -1,
+};
+
 export function OrderDetailsPage() {
   const { id } = useParams<{ id: string }>();
   const [order, setOrder] = useState<Order | null>(null);
@@ -76,6 +91,26 @@ export function OrderDetailsPage() {
       </div>
 
       <div className="order-details-grid">
+        <div className="account-panel order-progress-panel">
+          <div className="account-panel-heading">
+            <h2>Progress</h2>
+            <span className={`order-status order-status-${order.status}`}>{order.status}</span>
+          </div>
+          <div className="order-progress">
+            {statusSteps.map((step) => (
+              <div className={statusRank[order.status] >= statusRank[step.status] ? 'is-complete' : ''} key={step.status}>
+                <span />
+                <strong>{step.label}</strong>
+              </div>
+            ))}
+          </div>
+          {order.status === 'cancelled' ? (
+            <p className="account-muted">This order has been cancelled. Contact support if you need help with a payment or refund.</p>
+          ) : (
+            <p className="account-muted">We will keep this page updated as the order moves through payment, dispatch, and delivery.</p>
+          )}
+        </div>
+
         <div className="account-panel">
           <div className="account-panel-heading">
             <h2>Items</h2>
@@ -126,6 +161,14 @@ export function OrderDetailsPage() {
             {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.postalCode}<br />
             {order.shippingAddress.country} · {order.shippingAddress.phone}
           </p>
+        </div>
+
+        <div className="account-panel order-support-panel">
+          <h2>Need help?</h2>
+          <p className="account-muted">
+            Keep the order number handy when contacting Noor-e-ada support for delivery updates, payment confirmation, exchange, or cancellation queries.
+          </p>
+          <Link className="button button-secondary" to="/contact">Contact support</Link>
         </div>
       </div>
     </section>

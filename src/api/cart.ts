@@ -217,7 +217,15 @@ export const cartApi = {
 
   async placeOrder(shippingAddressId: string): Promise<Order> {
     const res = await apiClient.post<Parameters<typeof mapOrder>[0]>('/orders', { shippingAddressId });
-    return mapOrder(res.data);
+    const order = mapOrder(res.data);
+    notifyCartUpdated({
+      id: '',
+      items: [],
+      totals: { subtotal: 0, discountTotal: 0, shippingTotal: 0, grandTotal: 0 },
+      itemCount: 0,
+      uniqueItems: 0,
+    });
+    return order;
   },
 
   async createPaymentOrder(orderId: string): Promise<BackendPaymentOrder> {

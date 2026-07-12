@@ -5,7 +5,7 @@ import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { FormField } from '../../components/ui/FormField';
 import { useAuth } from '../../hooks/useAuth';
 import { ApiError } from '../../lib/apiClient';
-import type { Address, User } from '../../types/domain';
+import type { Address, Order, User } from '../../types/domain';
 
 const emptyAddress: AddressPayload = {
   label: 'Home',
@@ -31,6 +31,15 @@ const profileToPayload = (profile: User): UpdateProfilePayload => ({
 const errorMessage = (err: unknown) =>
   err instanceof ApiError ? err.message : 'Something went wrong. Please try again.';
 
+const money = new Intl.NumberFormat('en-IN', {
+  style: 'currency',
+  currency: 'INR',
+  maximumFractionDigits: 0,
+});
+
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium' }).format(new Date(value));
+
 export function AccountPage() {
   const { user, updateUser } = useAuth();
 
@@ -39,6 +48,7 @@ export function AccountPage() {
     user ? profileToPayload(user) : { firstName: '', lastName: '', phone: '', isMarketingOptIn: false },
   );
   const [addresses, setAddresses] = useState<Address[]>([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [addressDraft, setAddressDraft] = useState<AddressPayload>(emptyAddress);
   const [editingAddressId, setEditingAddressId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -52,13 +62,15 @@ export function AccountPage() {
     await Promise.resolve();
     setError('');
     try {
-      const [freshProfile, freshAddresses] = await Promise.all([
+      const [freshProfile, freshAddresses, freshOrders] = await Promise.all([
         accountApi.getProfile(),
         accountApi.listAddresses(),
+        accountApi.listOrders(),
       ]);
       setProfile(freshProfile);
       setProfileDraft(profileToPayload(freshProfile));
       setAddresses(freshAddresses);
+      setRecentOrders(freshOrders.slice(0, 3));
       updateUser(freshProfile);
     } catch (err) {
       setError(errorMessage(err));
@@ -291,6 +303,34 @@ export function AccountPage() {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="account-panel account-orders-panel">
+        <div className="account-panel-heading">
+          <h2>Recent orders</h2>
+          <Link to="/orders">View all</Link>
+        </div>
+
+        {recentOrders.length === 0 ? (
+          <div className="account-empty-panel">
+            <strong>No orders yet</strong>
+            <p>Your paid and pending orders will appear here after checkout.</p>
+            <Link className="button button-secondary" to="/products">Start shopping</Link>
+          </div>
+        ) : (
+          <div className="account-order-preview-list">
+            {recentOrders.map((order) => (
+              <Link className="account-order-preview" to={`/orders/${order.id}`} key={order.id}>
+                <span>
+                  <strong>{order.orderNumber ?? `Order ${order.id}`}</strong>
+                  {formatDate(order.placedAt ?? order.createdAt)} · {order.items.length} item{order.items.length === 1 ? '' : 's'}
+                </span>
+                <span className={`order-status order-status-${order.status}`}>{order.status}</span>
+                <strong>{money.format(order.total ?? order.totals.grandTotal)}</strong>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       <form className="account-panel account-form address-form" onSubmit={handleAddressSubmit}>

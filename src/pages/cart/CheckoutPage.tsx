@@ -39,6 +39,11 @@ interface RazorpayOptions {
   handler: (response: RazorpayResponse) => void;
   theme: { color: string };
   modal: { ondismiss: () => void };
+  prefill?: {
+    name?: string;
+    contact?: string;
+  };
+  notes?: Record<string, string>;
 }
 
 interface RazorpayInstance {
@@ -84,6 +89,7 @@ export function CheckoutPage() {
   const [loading, setLoading] = useState(true);
   const [placing, setPlacing] = useState(false);
   const [paying, setPaying] = useState(false);
+  const [paymentStatus, setPaymentStatus] = useState('');
   const [error, setError] = useState('');
 
   const loadCheckout = useCallback(async () => {
@@ -121,6 +127,7 @@ export function CheckoutPage() {
 
     setPlacing(true);
     setError('');
+    setPaymentStatus('');
     try {
       const reservation = await cartApi.reserveCheckoutStock(15);
       setReservationExpiresAt(reservation.expires_at);
@@ -128,7 +135,7 @@ export function CheckoutPage() {
       setOrder(createdOrder);
       const createdPaymentOrder = await cartApi.createPaymentOrder(createdOrder.id);
       setPaymentOrder(createdPaymentOrder);
-      await openRazorpayCheckout(createdPaymentOrder);
+      await openRazorpayCheckout(createdPaymentOrder, createdOrder.id);
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -136,14 +143,16 @@ export function CheckoutPage() {
     }
   }
 
-  async function openRazorpayCheckout(createdPaymentOrder = paymentOrder) {
+  async function openRazorpayCheckout(createdPaymentOrder = paymentOrder, orderId = order?.id) {
     if (!createdPaymentOrder) return;
     setPaying(true);
     setError('');
+    setPaymentStatus('Opening Razorpay checkout...');
     try {
       await loadRazorpayScript();
       if (!window.Razorpay) throw new Error('Razorpay checkout is unavailable.');
 
+      const selectedAddress = addresses.find((address) => address.id === selectedAddressId);
       const checkout = new window.Razorpay({
         key: createdPaymentOrder.key_id,
         amount: createdPaymentOrder.amount_paise,
@@ -153,10 +162,21 @@ export function CheckoutPage() {
         order_id: createdPaymentOrder.razorpay_order_id,
         theme: { color: '#9b2f43' },
         modal: {
-          ondismiss: () => setPaying(false),
+          ondismiss: () => {
+            setPaying(false);
+            setPaymentStatus('Payment window closed. You can reopen Razorpay to complete this order.');
+          },
+        },
+        prefill: {
+          name: selectedAddress?.fullName,
+          contact: selectedAddress?.phone,
+        },
+        notes: {
+          order_number: createdPaymentOrder.order_number,
         },
         handler: (response) => {
           void (async () => {
+            setPaymentStatus('Payment received. Verifying with Noor-e-ada...');
             try {
               const verified = await cartApi.verifyPayment({
                 razorpayOrderId: response.razorpay_order_id,
@@ -165,7 +185,12 @@ export function CheckoutPage() {
               });
               navigate(`/order-success/${verified.order_id}`);
             } catch (err) {
+              if (err instanceof ApiError && err.message.toLowerCase().includes('already verified') && orderId) {
+                navigate(`/order-success/${orderId}`);
+                return;
+              }
               setError(getErrorMessage(err));
+              setPaymentStatus('Payment could not be verified. If Razorpay shows success, open the order from your account and retry after a moment.');
             } finally {
               setPaying(false);
             }
@@ -173,8 +198,10 @@ export function CheckoutPage() {
         },
       });
       checkout.open();
+      setPaymentStatus('Complete the Razorpay test payment. Use OTP 123456 when prompted.');
     } catch (err) {
       setError(getErrorMessage(err));
+      setPaymentStatus('');
       setPaying(false);
     }
   }
@@ -212,6 +239,7 @@ export function CheckoutPage() {
       </div>
 
       {error && <p className="auth-error account-alert" role="alert">{error}</p>}
+      {paymentStatus && <p className="auth-success account-alert">{paymentStatus}</p>}
 
       <div className="checkout-layout">
         <div className="account-panel checkout-panel">
@@ -264,10 +292,10 @@ export function CheckoutPage() {
               <span>{paymentOrder.order_number}</span>
             </div>
             <p className="account-muted">
-              Amount: {money.format(paymentOrder.amount_paise / 100)}. Use Razorpay test card <strong>4111 1111 1111 1111</strong>, any future expiry, any CVV, and any OTP in test mode.
+              Amount: {money.format(paymentOrder.amount_paise / 100)}. Use Razorpay test card <strong>4111 1111 1111 1111</strong>, any future expiry, any CVV, and test OTP <strong>123456</strong>.
             </p>
             <button type="button" className="button button-primary" onClick={() => void openRazorpayCheckout()} disabled={paying}>
-              {paying ? 'Opening Razorpay...' : 'Pay with Razorpay'}
+              {paying ? 'Waiting for payment...' : 'Pay with Razorpay'}
             </button>
           </div>
         )}
