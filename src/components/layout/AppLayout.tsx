@@ -27,7 +27,7 @@ export function AppLayout() {
 
   useEffect(() => {
     if (!isAuthenticated) { setCartCount(0); return; }
-    cartApi.getCart().then((cart) => setCartCount(cart.itemCount)).catch(() => {});
+    cartApi.getCart().then((cart) => setCartCount(cart.itemCount ?? 0)).catch(() => {});
   }, [isAuthenticated, location.pathname]);
 
   useEffect(() => {
