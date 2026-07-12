@@ -88,6 +88,15 @@ interface BackendVerifyPayment {
 }
 
 const toNumber = (value: number | string | undefined | null) => Number(value ?? 0);
+export const CART_UPDATED_EVENT = 'nooreada:cart-updated';
+
+function getCartItemCount(cart: BackendCart): number {
+  return cart.summary.item_count ?? cart.items.reduce((total, item) => total + item.quantity, 0);
+}
+
+function notifyCartUpdated(cart: Cart) {
+  globalThis.dispatchEvent(new CustomEvent(CART_UPDATED_EVENT, { detail: { itemCount: cart.itemCount } }));
+}
 
 function mapCartItem(item: BackendCartItem): CartItem {
   const product: Product = {
@@ -154,8 +163,8 @@ function mapCart(cart: BackendCart): Cart {
       shippingTotal: 0,
       grandTotal,
     },
-    itemCount: cart.summary.item_count,
-    uniqueItems: cart.summary.unique_items,
+    itemCount: getCartItemCount(cart),
+    uniqueItems: cart.summary.unique_items ?? cart.items.length,
     message: cart.message,
   };
 }
@@ -168,27 +177,37 @@ export const cartApi = {
 
   async addItem(variantId: string, quantity = 1): Promise<Cart> {
     const res = await apiClient.post<BackendCart>('/cart/items', { variantId, quantity });
-    return mapCart(res.data);
+    const cart = mapCart(res.data);
+    notifyCartUpdated(cart);
+    return cart;
   },
 
   async updateItemQuantity(itemId: string, quantity: number): Promise<Cart> {
     const res = await apiClient.put<BackendCart>(`/cart/items/${itemId}`, { quantity });
-    return mapCart(res.data);
+    const cart = mapCart(res.data);
+    notifyCartUpdated(cart);
+    return cart;
   },
 
   async removeItem(itemId: string): Promise<Cart> {
     const res = await apiClient.delete<BackendCart>(`/cart/items/${itemId}`);
-    return mapCart(res.data);
+    const cart = mapCart(res.data);
+    notifyCartUpdated(cart);
+    return cart;
   },
 
   async clearCart(): Promise<Cart> {
     const res = await apiClient.delete<BackendCart>('/cart');
-    return mapCart(res.data);
+    const cart = mapCart(res.data);
+    notifyCartUpdated(cart);
+    return cart;
   },
 
   async applyCoupon(code: string): Promise<Cart> {
     const res = await apiClient.post<BackendCart>('/cart/coupon', { code });
-    return mapCart(res.data);
+    const cart = mapCart(res.data);
+    notifyCartUpdated(cart);
+    return cart;
   },
 
   async reserveCheckoutStock(holdMinutes = 15): Promise<BackendReservation> {

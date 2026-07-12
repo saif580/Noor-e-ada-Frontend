@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { cartApi } from '../../api/cart';
+import { CART_UPDATED_EVENT, cartApi } from '../../api/cart';
 import { useAuth } from '../../hooks/useAuth';
 import { footerNavigation, mainNavigation } from '../../routes/appRoutes';
 import headerLogo from '../../assets/logo.svg';
@@ -29,6 +29,16 @@ export function AppLayout() {
     if (!isAuthenticated) { setCartCount(0); return; }
     cartApi.getCart().then((cart) => setCartCount(cart.itemCount ?? 0)).catch(() => {});
   }, [isAuthenticated, location.pathname]);
+
+  useEffect(() => {
+    function onCartUpdated(event: Event) {
+      const cartEvent = event as CustomEvent<{ itemCount?: number }>;
+      setCartCount(cartEvent.detail.itemCount ?? 0);
+    }
+
+    globalThis.addEventListener(CART_UPDATED_EVENT, onCartUpdated);
+    return () => globalThis.removeEventListener(CART_UPDATED_EVENT, onCartUpdated);
+  }, []);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
