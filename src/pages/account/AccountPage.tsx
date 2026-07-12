@@ -1,7 +1,7 @@
 import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { accountApi, addressToPayload, type AddressPayload, type UpdateProfilePayload } from '../../api/account';
-import { ErrorState, LoadingState, SuccessState } from '../../components/ui/AsyncState';
+import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { FormField } from '../../components/ui/FormField';
 import { useAuth } from '../../hooks/useAuth';
 import { ApiError } from '../../lib/apiClient';
@@ -197,7 +197,7 @@ export function AccountPage() {
       </div>
 
       {error && <p className="auth-error account-alert" role="alert">{error}</p>}
-      {success && <SuccessState title={success} />}
+      {success && <output className="auth-success account-alert">{success}</output>}
 
       <div className="account-grid">
         <form className="account-panel account-form" onSubmit={handleProfileSubmit}>
@@ -277,10 +277,10 @@ export function AccountPage() {
                   <div className="account-actions">
                     <button type="button" onClick={() => startEditAddress(address)}>Edit</button>
                     <button type="button" onClick={() => void setDefaultAddress(address, 'isDefaultShipping')} disabled={addressActionId === address.id || address.isDefaultShipping}>
-                      Shipping
+                      Set shipping
                     </button>
                     <button type="button" onClick={() => void setDefaultAddress(address, 'isDefaultBilling')} disabled={addressActionId === address.id || address.isDefaultBilling}>
-                      Billing
+                      Set billing
                     </button>
                     <button type="button" onClick={() => void handleDeleteAddress(address.id)} disabled={addressActionId === address.id}>
                       Delete

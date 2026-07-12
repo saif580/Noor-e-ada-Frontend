@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { cartApi } from '../../api/cart';
 import { useAuth } from '../../hooks/useAuth';
 import { footerNavigation, mainNavigation } from '../../routes/appRoutes';
 import headerLogo from '../../assets/logo.svg';
@@ -15,12 +16,19 @@ const MARQUEE_ITEMS = [
   'Easy 7-Day Returns',
 ] as const;
 
-export function AppLayout({ cartCount = 0 }: Readonly<{ cartCount?: number }>) {
+export function AppLayout() {
   const { user, isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [scrollPct, setScrollPct] = useState(0);
   const [menuOpen, setMenuOpen]   = useState(false);
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    if (!isAuthenticated) { setCartCount(0); return; }
+    cartApi.getCart().then((cart) => setCartCount(cart.itemCount)).catch(() => {});
+  }, [isAuthenticated, location.pathname]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
