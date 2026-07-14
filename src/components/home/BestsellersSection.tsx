@@ -120,7 +120,14 @@ export function BestsellersSection() {
               <button type="button" onClick={() => void addHomeProduct(index)} disabled={addingIndex === index}>
                 {addingIndex === index ? 'Adding...' : 'Add to cart'}
               </button>
-              {messages[index] && <small className="catalog-card-message">{messages[index]}</small>}
+              {messages[index] && (
+                <small
+                  className={`home-card-status ${messages[index] === 'Added to cart' ? 'is-success' : 'is-error'}`}
+                  aria-live="polite"
+                >
+                  {messages[index]}
+                </small>
+              )}
             </div>
           </article>
         ))}
