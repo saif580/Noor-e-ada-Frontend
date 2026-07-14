@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 
 interface AlertProps {
   message: string;
   type: 'error' | 'success';
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 export function Alert({ message, type, className, style }: Readonly<AlertProps>) {
@@ -12,9 +12,14 @@ export function Alert({ message, type, className, style }: Readonly<AlertProps>)
 
   useEffect(() => {
     if (message && ref.current) {
-      ref.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      ref.current.focus({ preventScroll: true });
+      const frame = globalThis.requestAnimationFrame(() => {
+        ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        ref.current?.focus();
+      });
+      return () => globalThis.cancelAnimationFrame(frame);
     }
+
+    return undefined;
   }, [message]);
 
   if (!message) return null;

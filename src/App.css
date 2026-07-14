@@ -948,6 +948,11 @@
   text-align: center;
 }
 
+.async-state:focus {
+  outline: 3px solid rgba(155, 47, 67, 0.28);
+  outline-offset: 3px;
+}
+
 .async-state strong {
   color: #251c17;
   font-family: var(--font-display);
@@ -2891,6 +2896,12 @@
   font-weight: 700;
   line-height: 1.45;
   margin: 0 0 8px;
+}
+
+.auth-error:focus,
+.auth-success:focus {
+  outline: 3px solid rgba(155, 47, 67, 0.32);
+  outline-offset: 3px;
 }
 
 .auth-error::before {

@@ -82,16 +82,14 @@ export function LoginPage() {
           </p>
 
           {/* Status messages from other flows */}
-          {registeredMsg && (
-            <output className="auth-success">
-              Account created! Please check your email to verify your address before signing in.
-            </output>
-          )}
-          {resetMsg && (
-            <output className="auth-success">
-              Password reset successfully. You can now sign in with your new password.
-            </output>
-          )}
+          <Alert
+            message={registeredMsg ? 'Account created! Please check your email to verify your address before signing in.' : ''}
+            type="success"
+          />
+          <Alert
+            message={resetMsg ? 'Password reset successfully. You can now sign in with your new password.' : ''}
+            type="success"
+          />
 
           <Alert message={error} type="error" />
 

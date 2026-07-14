@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 interface StateProps {
   title: string;
   message?: string;
@@ -28,8 +30,18 @@ export function EmptyState({ title, message, action }: StateProps) {
 }
 
 export function ErrorState({ title, message, action }: StateProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const frame = globalThis.requestAnimationFrame(() => {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      ref.current?.focus();
+    });
+    return () => globalThis.cancelAnimationFrame(frame);
+  }, [title, message]);
+
   return (
-    <div className="async-state async-state-error" role="alert">
+    <div ref={ref} className="async-state async-state-error" role="alert" tabIndex={-1}>
       <strong>{title}</strong>
       {message && <p>{message}</p>}
       {action && <button type="button" onClick={action.onClick}>{action.label}</button>}
@@ -38,8 +50,18 @@ export function ErrorState({ title, message, action }: StateProps) {
 }
 
 export function SuccessState({ title, message, action }: StateProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const frame = globalThis.requestAnimationFrame(() => {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      ref.current?.focus();
+    });
+    return () => globalThis.cancelAnimationFrame(frame);
+  }, [title, message]);
+
   return (
-    <div className="async-state async-state-success" role="status">
+    <div ref={ref} className="async-state async-state-success" role="status" tabIndex={-1}>
       <strong>{title}</strong>
       {message && <p>{message}</p>}
       {action && <button type="button" onClick={action.onClick}>{action.label}</button>}

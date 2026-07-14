@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { authApi } from '../../api/auth';
+import { Alert } from '../../components/ui/Alert';
 import { ApiError } from '../../lib/apiClient';
 import logoMark from '../../assets/logo.svg';
 
@@ -62,9 +63,7 @@ export function VerifyEmailPage() {
         {status === 'error' && (
           <>
             <h1 className="auth-heading">Verification failed</h1>
-            <p className="auth-error" role="alert" style={{ textAlign: 'left' }}>
-              {message}
-            </p>
+            <Alert message={message} type="error" style={{ textAlign: 'left' }} />
             <br />
             <div className="auth-links">
               <Link to="/resend-verification">Resend verification email</Link>

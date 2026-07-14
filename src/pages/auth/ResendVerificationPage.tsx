@@ -36,10 +36,10 @@ export function ResendVerificationPage() {
         </p>
 
         {submitted ? (
-          <output className="auth-success">
-            If an unverified account exists for that email, a new link has been sent.
-            Please check your inbox (and spam folder).
-          </output>
+          <Alert
+            message="If an unverified account exists for that email, a new link has been sent. Please check your inbox (and spam folder)."
+            type="success"
+          />
         ) : (
           <>
             <Alert message={error} type="error" />

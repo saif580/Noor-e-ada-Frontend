@@ -36,10 +36,10 @@ export function ForgotPasswordPage() {
         </p>
 
         {submitted ? (
-          <div className="auth-success" role="status">
-            If that email is registered, a reset link has been sent. Please check
-            your inbox (and spam folder).
-          </div>
+          <Alert
+            message="If that email is registered, a reset link has been sent. Please check your inbox (and spam folder)."
+            type="success"
+          />
         ) : (
           <>
             <Alert message={error} type="error" />
