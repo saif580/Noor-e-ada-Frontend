@@ -2,6 +2,7 @@ import { apiClient } from '../lib/apiClient';
 import { mapOrder } from './account';
 import { mapCategory, mapProduct } from './catalog';
 import { mapUser } from './auth';
+import { getDisplayProductName } from '../lib/catalogDisplay';
 import type { Category, Order, PaginatedResponse, Product, User, UserRole } from '../types/domain';
 
 type BackendProduct = Parameters<typeof mapProduct>[0];
@@ -130,7 +131,7 @@ const mapLowStockVariant = (variant: {
 }): AdminLowStockVariant => ({
   variantId: String(variant.variant_id),
   productId: String(variant.product_id),
-  productName: variant.product_name,
+  productName: getDisplayProductName(String(variant.product_id), variant.product_name),
   productSlug: variant.product_slug,
   sku: variant.sku,
   color: variant.color ?? undefined,

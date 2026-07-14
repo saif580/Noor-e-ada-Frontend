@@ -158,5 +158,5 @@ export function decorateProduct(product: Product): Product {
 }
 
 export function getDisplayProductName(productId: string, fallbackName: string): string {
-  return productDisplayById[productId]?.name ?? cleanCatalogName(fallbackName) ?? fallbackName;
+  return productDisplayById[productId]?.name ?? (cleanCatalogName(fallbackName) || fallbackName);
 }
