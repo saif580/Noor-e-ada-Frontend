@@ -9,7 +9,7 @@ export function BestsellersSection() {
           <span className="eyebrow">Customer favourites</span>
           <h2 className="reveal">Bestsellers this week</h2>
         </div>
-        <a href="/products?sort=popular">Shop all products</a>
+        <a href="/products?sort=popularity">Shop all products</a>
       </div>
 
       <div className="product-grid">

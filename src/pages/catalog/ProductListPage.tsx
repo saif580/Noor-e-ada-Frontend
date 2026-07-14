@@ -18,6 +18,9 @@ const sortOptions: Array<{ value: CatalogSort; label: string }> = [
 const getErrorMessage = (err: unknown) =>
   err instanceof ApiError ? err.message : 'Could not load products. Please try again.';
 
+const isCatalogSort = (value: string | null): value is CatalogSort =>
+  sortOptions.some((option) => option.value === value);
+
 interface ProductListPageProps {
   eyebrow?: string;
   title?: string;
@@ -41,16 +44,20 @@ export function ProductListPage({
   const [error, setError] = useState('');
   const wishlist = useWishlistState();
 
-  const filters = useMemo(() => ({
-    q: searchParams.get('q') ?? '',
-    categoryId: searchParams.get('categoryId') ?? '',
-    minPrice: searchParams.get('minPrice') ?? '',
-    maxPrice: searchParams.get('maxPrice') ?? '',
-    sizes: searchParams.get('sizes') ?? '',
-    colors: searchParams.get('colors') ?? '',
-    sort: (searchParams.get('sort') as CatalogSort | null) ?? defaultSort,
-    page: Number(searchParams.get('page') ?? 1),
-  }), [defaultSort, searchParams]);
+  const filters = useMemo(() => {
+    const urlSort = searchParams.get('sort');
+
+    return {
+      q: searchParams.get('q') ?? '',
+      categoryId: searchParams.get('categoryId') ?? '',
+      minPrice: searchParams.get('minPrice') ?? '',
+      maxPrice: searchParams.get('maxPrice') ?? '',
+      sizes: searchParams.get('sizes') ?? '',
+      colors: searchParams.get('colors') ?? '',
+      sort: isCatalogSort(urlSort) ? urlSort : defaultSort,
+      page: Number(searchParams.get('page') ?? 1),
+    };
+  }, [defaultSort, searchParams]);
 
   const [draft, setDraft] = useState(filters);
 
