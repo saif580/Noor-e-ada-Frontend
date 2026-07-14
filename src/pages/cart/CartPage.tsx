@@ -141,13 +141,21 @@ export function CartPage() {
   }
 
   const isEmpty = !cart || cart.items.length === 0;
+  const itemCount = cart?.itemCount ?? 0;
 
   return (
     <section className="cart-page">
-      <div className="account-heading">
-        <span className="eyebrow">Shopping bag</span>
-        <h1>Cart</h1>
-        <p>{isAuthenticated ? 'Review your selected styles before reserving stock for checkout.' : 'Your picks are saved here. Sign in when you are ready to checkout.'}</p>
+      <div className="account-heading cart-heading">
+        <div>
+          <span className="eyebrow">Shopping bag</span>
+          <h1>Your Cart</h1>
+          <p>{isAuthenticated ? 'Review your selected styles before reserving stock for checkout.' : 'Your picks are saved here. Sign in when you are ready to checkout.'}</p>
+        </div>
+        {!isEmpty && (
+          <span className="cart-heading-count">
+            {itemCount} {itemCount === 1 ? 'item' : 'items'}
+          </span>
+        )}
       </div>
 
       <Alert message={error} type="error" className="account-alert" />
