@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { CART_UPDATED_EVENT, cartApi } from '../../api/cart';
 import { useAuth } from '../../hooks/useAuth';
+import { guestCart } from '../../lib/guestCart';
 import { footerNavigation, mainNavigation } from '../../routes/appRoutes';
 import headerLogo from '../../assets/logo.svg';
 
@@ -26,7 +27,11 @@ export function AppLayout() {
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    if (!isAuthenticated) { setCartCount(0); return; }
+    if (!isAuthenticated) {
+      setCartCount(guestCart.getItemCount());
+      return;
+    }
+
     cartApi.getCart().then((cart) => setCartCount(cart.itemCount ?? 0)).catch(() => {});
   }, [isAuthenticated, location.pathname]);
 

@@ -5,7 +5,9 @@ import { getProductImageUrl } from '../../components/catalog/productUtils';
 import { Alert } from '../../components/ui/Alert';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { FormField } from '../../components/ui/FormField';
+import { useAuth } from '../../hooks/useAuth';
 import { ApiError } from '../../lib/apiClient';
+import { guestCart } from '../../lib/guestCart';
 import type { Cart } from '../../types/domain';
 
 const money = new Intl.NumberFormat('en-IN', {
@@ -18,6 +20,7 @@ const getErrorMessage = (err: unknown) =>
   err instanceof ApiError ? err.message : 'Could not load your cart. Please try again.';
 
 export function CartPage() {
+  const { isAuthenticated } = useAuth();
   const [cart, setCart] = useState<Cart | null>(null);
   const [coupon, setCoupon] = useState('');
   const [loading, setLoading] = useState(true);
@@ -28,6 +31,13 @@ export function CartPage() {
   const loadCart = useCallback(async () => {
     await Promise.resolve();
     setError('');
+    if (!isAuthenticated) {
+      setCart(guestCart.getCart());
+      setCoupon('');
+      setLoading(false);
+      return;
+    }
+
     try {
       const freshCart = await cartApi.getCart();
       setCart(freshCart);
@@ -37,7 +47,7 @@ export function CartPage() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
     const timer = globalThis.setTimeout(() => {
@@ -52,7 +62,9 @@ export function CartPage() {
     setError('');
     setSuccess('');
     try {
-      setCart(await cartApi.updateItemQuantity(itemId, quantity));
+      setCart(isAuthenticated
+        ? await cartApi.updateItemQuantity(itemId, quantity)
+        : guestCart.updateItemQuantity(itemId, quantity));
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -65,7 +77,7 @@ export function CartPage() {
     setError('');
     setSuccess('');
     try {
-      setCart(await cartApi.removeItem(itemId));
+      setCart(isAuthenticated ? await cartApi.removeItem(itemId) : guestCart.removeItem(itemId));
       setSuccess('Item removed.');
     } catch (err) {
       setError(getErrorMessage(err));
@@ -79,7 +91,7 @@ export function CartPage() {
     setError('');
     setSuccess('');
     try {
-      const freshCart = await cartApi.clearCart();
+      const freshCart = isAuthenticated ? await cartApi.clearCart() : guestCart.clearCart();
       setCart(freshCart);
       setCoupon('');
       setSuccess(freshCart.message ?? 'Cart cleared.');
@@ -95,6 +107,12 @@ export function CartPage() {
     setBusyId('coupon');
     setError('');
     setSuccess('');
+    if (!isAuthenticated) {
+      setError('Sign in before applying coupons at checkout.');
+      setBusyId(null);
+      return;
+    }
+
     try {
       const freshCart = await cartApi.applyCoupon(coupon);
       setCart(freshCart);
@@ -129,7 +147,7 @@ export function CartPage() {
       <div className="account-heading">
         <span className="eyebrow">Shopping bag</span>
         <h1>Cart</h1>
-        <p>Review your selected styles before reserving stock for checkout.</p>
+        <p>{isAuthenticated ? 'Review your selected styles before reserving stock for checkout.' : 'Your picks are saved here. Sign in when you are ready to checkout.'}</p>
       </div>
 
       <Alert message={error} type="error" className="account-alert" />
@@ -178,11 +196,14 @@ export function CartPage() {
 
             <form className="coupon-form" onSubmit={applyCoupon}>
               <FormField label="Coupon code" name="coupon" value={coupon} onChange={(event) => setCoupon(event.target.value)} />
-              <button type="submit" className="button button-secondary" disabled={busyId === 'coupon'}>Apply coupon</button>
+              <button type="submit" className="button button-secondary" disabled={busyId === 'coupon' || !isAuthenticated}>Apply coupon</button>
             </form>
+            {!isAuthenticated && <p className="account-muted">Coupons and stock reservation are available after sign in.</p>}
             {cart.coupon && <p className="account-muted">Applied: {cart.coupon.code}</p>}
 
-            <Link to="/checkout" className="button button-primary cart-checkout-link">Checkout</Link>
+            <Link to={isAuthenticated ? '/checkout' : '/login'} state={isAuthenticated ? undefined : { from: { pathname: '/checkout' } }} className="button button-primary cart-checkout-link">
+              {isAuthenticated ? 'Checkout' : 'Sign in to checkout'}
+            </Link>
             <button type="button" className="account-link-button cart-clear-button" onClick={() => void clearCart()} disabled={busyId === 'clear'}>Clear cart</button>
           </aside>
         </div>

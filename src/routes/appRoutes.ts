@@ -14,7 +14,7 @@ export const appRoutes = [
   { path: '/collections', label: 'Collections', access: 'public', navGroup: 'main' },
   { path: '/bestsellers', label: 'Bestsellers', access: 'public', navGroup: 'main' },
   { path: '/wishlist', label: 'Wishlist', access: 'customer', navGroup: 'account' },
-  { path: '/cart', label: 'Cart', access: 'customer', navGroup: 'account' },
+  { path: '/cart', label: 'Cart', access: 'public', navGroup: 'account' },
   { path: '/checkout', label: 'Checkout', access: 'customer' },
   { path: '/account', label: 'Account', access: 'customer', navGroup: 'account' },
   { path: '/orders', label: 'Orders', access: 'customer', navGroup: 'account' },

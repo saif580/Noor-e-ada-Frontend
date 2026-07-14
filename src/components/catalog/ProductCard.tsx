@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../api/cart';
+import { useAuth } from '../../hooks/useAuth';
 import { ApiError } from '../../lib/apiClient';
+import { guestCart } from '../../lib/guestCart';
 import type { Product } from '../../types/domain';
 import { getProductImageUrl, getStockLabel, productPriceLabel } from './productUtils';
 
@@ -18,6 +20,7 @@ export function ProductCard({ product, isWishlisted = false, onToggleWishlist }:
   const [adding, setAdding] = useState(false);
   const [savingWishlist, setSavingWishlist] = useState(false);
   const [message, setMessage] = useState('');
+  const { isAuthenticated } = useAuth();
 
   async function addFirstVariant() {
     const variant = product.variants.find((item) => item.isActive !== false && item.stockQuantity > 0);
@@ -29,7 +32,8 @@ export function ProductCard({ product, isWishlisted = false, onToggleWishlist }:
     setAdding(true);
     setMessage('');
     try {
-      await cartApi.addItem(variant.id, 1);
+      if (isAuthenticated) await cartApi.addItem(variant.id, 1);
+      else guestCart.addItem(product, variant, 1);
       setMessage('Added');
     } catch (err) {
       setMessage(err instanceof ApiError ? err.message : 'Could not add');

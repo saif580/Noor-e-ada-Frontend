@@ -75,11 +75,11 @@ function App() {
             <Route path="/shipping" element={<ShippingPage />} />
             <Route path="/returns" element={<ReturnsPage />} />
             <Route path="/size-guide" element={<SizeGuidePage />} />
+            <Route path="/cart" element={<CartPage />} />
 
             {/* Customer-only routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/account"  element={<AccountPage />} />
-              <Route path="/cart" element={<CartPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/order-success/:id" element={<OrderSuccessPage />} />
               <Route path="/orders"   element={<OrdersPage />} />

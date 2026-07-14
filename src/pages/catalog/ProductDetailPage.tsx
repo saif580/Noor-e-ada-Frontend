@@ -12,8 +12,10 @@ import {
 import { ProductReviews } from '../../components/catalog/ProductReviews';
 import { Alert } from '../../components/ui/Alert';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
+import { useAuth } from '../../hooks/useAuth';
 import { useWishlistState } from '../../hooks/useWishlistState';
 import { ApiError } from '../../lib/apiClient';
+import { guestCart } from '../../lib/guestCart';
 import type { Product, ProductVariant } from '../../types/domain';
 
 const money = new Intl.NumberFormat('en-IN', {
@@ -51,6 +53,7 @@ export function ProductDetailPage() {
   const [wishlistMessage, setWishlistMessage] = useState('');
   const [error, setError] = useState('');
   const wishlist = useWishlistState();
+  const { isAuthenticated } = useAuth();
 
   const selectedVariant = useMemo(
     () => product?.variants.find((variant) => variant.id === selectedVariantId) ?? product?.variants[0],
@@ -87,11 +90,12 @@ export function ProductDetailPage() {
   }, [loadProduct]);
 
   async function addToCart() {
-    if (!selectedVariant) return;
+    if (!product || !selectedVariant) return;
     setAdding(true);
     setCartMessage('');
     try {
-      await cartApi.addItem(selectedVariant.id, 1);
+      if (isAuthenticated) await cartApi.addItem(selectedVariant.id, 1);
+      else guestCart.addItem(product, selectedVariant, 1);
       setCartMessage('Added to cart.');
     } catch (err) {
       setCartMessage(getErrorMessage(err));

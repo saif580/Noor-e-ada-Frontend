@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react';
 import { authApi, type LoginPayload, type RegisterPayload } from '../api/auth';
+import { guestCart } from '../lib/guestCart';
 import { tokenStorage } from '../lib/tokenStorage';
 import type { User } from '../types/domain';
 import { AuthContext, type AuthContextValue } from './authContextCore';
@@ -18,6 +19,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { user: loggedInUser, accessToken, refreshToken } = await authApi.login(payload);
     tokenStorage.setTokens(accessToken, refreshToken);
     tokenStorage.setUser(loggedInUser);
+    try {
+      await guestCart.mergeIntoAccount();
+    } catch {
+      // Do not block login if a saved guest-cart item is no longer available.
+    }
     setUser(loggedInUser);
   }, []);
 
