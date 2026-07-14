@@ -37,7 +37,7 @@ export function CategoryListPage() {
 
   return (
     <section className="catalog-page">
-      <div className="account-heading">
+      <div className="account-heading catalog-page-heading">
         <span className="eyebrow">Shop by category</span>
         <h1>Collections</h1>
         <p>Browse Noor-e-ada edits by occasion, craft, and silhouette.</p>

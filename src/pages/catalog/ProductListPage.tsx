@@ -177,7 +177,7 @@ export function ProductListPage({
         </aside>
 
         <div className="catalog-results">
-          <div className="account-heading catalog-results-heading">
+          <div className="account-heading catalog-results-heading catalog-page-heading">
             <span className="eyebrow">{eyebrow}</span>
             <h1>{title}</h1>
             <p>{total} {description}</p>

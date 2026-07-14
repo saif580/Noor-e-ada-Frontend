@@ -1683,6 +1683,23 @@
   padding: 64px 48px 84px;
 }
 
+.catalog-page-heading {
+  max-width: 660px;
+  margin-bottom: 26px;
+}
+
+.catalog-page-heading h1 {
+  font-size: clamp(32px, 3.6vw, 48px);
+  line-height: 1;
+}
+
+.catalog-page-heading p {
+  max-width: 560px;
+  margin-top: 12px;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
 .catalog-layout {
   display: grid;
   grid-template-columns: 300px minmax(0, 1fr);
@@ -3051,6 +3068,7 @@
   .cart-page { padding: 40px 16px 52px; }
   .wishlist-page { padding: 40px 16px 52px; }
   .account-heading h1 { font-size: 38px; }
+  .catalog-page-heading h1 { font-size: 32px; }
   .cart-heading h1 { font-size: 34px; }
   .account-panel { padding: 20px; }
   .account-panel-heading,
