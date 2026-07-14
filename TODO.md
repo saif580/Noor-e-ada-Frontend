@@ -29,6 +29,8 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [x] Reset password page wired to `POST /api/auth/reset-password`
 - [x] Protected routes for customer account and checkout
 - [x] Admin-only route guard using `GET /api/users/admin/access`
+- [ ] Add OAuth sign-in buttons after backend OAuth endpoints exist
+- [ ] Merge OAuth login into the existing `AuthProvider` token/session flow
 
 ## Catalog
 
@@ -43,17 +45,27 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [x] Variant selector for size, color, material, price, compare-at price, and stock state
 - [x] Product image gallery using backend product image data
 - [x] Out-of-stock and low-stock UI states
+- [x] Public pages for New Arrivals, Bestsellers, Collections, Contact, Shipping, Returns, and Size Guide
+- [x] Professional catalog filter sidebar with grouped search, category, budget, details, and sort controls
+- [x] Realistic frontend display names/descriptions for seeded UAT catalog data
+- [x] Sample product and collection imagery for incomplete UAT media records
+- [x] Compact catalog/list page headings for ecommerce browsing pages
 
 ## Cart & Checkout
 
+- [x] Public guest cart support before login
+- [x] Merge guest cart into account cart after login
+- [x] Require login only when starting checkout/payment
 - [x] Cart page wired to `GET /api/cart`
 - [x] Add-to-cart flow wired to `POST /api/cart/items`
+- [x] Add-to-cart works from catalog cards, product detail, collection pages, and home bestsellers
 - [x] Quantity update flow wired to `PUT /api/cart/items/:id`
 - [x] Remove item flow wired to `DELETE /api/cart/items/:id`
 - [x] Clear cart flow wired to `DELETE /api/cart`
 - [x] Coupon apply flow wired to `POST /api/cart/coupon`
-- [ ] Coupon remove UX after backend adds a remove-coupon endpoint
+- [ ] Coupon remove API wrapper and UX wired to backend `DELETE /api/cart/coupon`
 - [x] Cart totals UI with subtotal, discount, shipping, and final total
+- [x] Professional cart page layout with compact heading, item count, item rows, and summary panel
 - [x] Checkout address selection using saved addresses
 - [x] Checkout stock reservation wired to `POST /api/inventory/reservations/checkout`
 - [x] Place order flow wired to `POST /api/orders`
@@ -113,6 +125,7 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 ## Backend Integration Notes
 
 - [x] Coupon remove action is supported by backend at `DELETE /api/cart/coupon`
+- [ ] Frontend coupon remove button still needs to be added
 - [ ] Razorpay webhook is backend-only at `POST /api/payments/webhook`; no frontend screen needed unless admin payment logs are added
 
 ## UAT Deployment
@@ -132,7 +145,8 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [x] Add Vercel SPA rewrite config for direct route refreshes
 - [x] Fix Vercel Linux install by removing macOS-only Rolldown binding from direct dependencies
 - [x] Verify backend service is live on Render
-- [ ] Verify frontend build and routing on direct page refresh
+- [x] Verify frontend production build locally with `npm run build`
+- [ ] Verify frontend routing on direct page refresh in deployed Vercel UAT
 - [ ] Seed or create one verified UAT customer login
 - [ ] Seed or create starter UAT categories, products, variants, images, and inventory
 - [ ] Run UAT smoke test: register, verify/login, browse catalog, add to cart, checkout, wishlist, review
@@ -148,4 +162,6 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [ ] Add API integration smoke tests for auth, catalog, cart, and checkout
 - [ ] Check responsive layouts for mobile, tablet, and desktop
 - [ ] Check accessibility for forms, navigation, dialogs, and buttons
-- [ ] Replace default Vite/React assets and links
+- [x] Replace default Vite/React assets and links
+- [x] Add Noor-e-ada title, favicon/title logo, and metadata
+- [ ] Add automated visual checks for main ecommerce pages
