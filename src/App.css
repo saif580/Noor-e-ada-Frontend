@@ -267,16 +267,13 @@
   margin-top: 34px;
 }
 
-/* Highlight word with animated underline */
-.highlight-word { position: relative; display: inline; }
-.highlight-word::after {
-  content: '';
-  position: absolute;
-  bottom: -3px; left: 0;
-  width: 0; height: 3px;
-  background: linear-gradient(90deg, #9b2f43, #c9ac83);
-  border-radius: 2px;
-  animation: underline-draw 1s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+/* Hero headline accent */
+.highlight-word {
+  display: inline-block;
+  padding: 0 0.08em;
+  border-radius: 6px;
+  background: linear-gradient(180deg, transparent 58%, rgba(201, 172, 131, 0.28) 58%);
+  color: #1f1713;
 }
 
 /* ─── HERO METRICS ───────────────────────── */
