@@ -102,25 +102,30 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 
 ## Admin
 
-- [ ] Admin dashboard shell
-- [ ] Admin product list wired to `GET /api/products?all=true`
-- [ ] Create product form wired to `POST /api/products`
-- [ ] Update product form wired to `PUT /api/products/:productId`
-- [ ] Delete product action wired to `DELETE /api/products/:productId`
-- [ ] Bulk product active/inactive action wired to `PATCH /api/products/bulk/status`
+- [x] Standalone admin login page at `/admin/login`
+- [x] Admin route guard redirects unauthenticated users to `/admin/login`
+- [x] Admin dashboard shell with fixed sidebar navigation and independent content scroll
+- [x] Admin product list wired to `GET /api/products?all=true`
+- [x] Create product form wired to `POST /api/products`
+- [x] Update product form wired to `PUT /api/products/:productId`
+- [x] Delete product action wired to `DELETE /api/products/:productId`
+- [x] Single product active/inactive action wired through `PATCH /api/products/bulk/status`
+- [ ] True multi-select bulk product active/inactive action wired to `PATCH /api/products/bulk/status`
 - [ ] Bulk product delete action wired to `DELETE /api/products/bulk`
 - [ ] Product image upload wired to `POST /api/products/images/upload`
-- [ ] Admin category create/update forms wired to `POST /api/categories` and `PUT /api/categories/:categoryId`
-- [ ] Admin category delete action wired to `DELETE /api/categories/:categoryId`
-- [ ] Low-stock inventory page wired to `GET /api/inventory/low-stock`
-- [ ] Admin order list page wired to `GET /api/orders/admin`
-- [ ] Admin order filters for search, status, user, page, and limit
+- [x] Admin category create/update forms wired to `POST /api/categories` and `PUT /api/categories/:categoryId`
+- [x] Admin category delete action wired to `DELETE /api/categories/:categoryId`
+- [x] Low-stock inventory page wired to `GET /api/inventory/low-stock`
+- [x] Normalize admin inventory product names to storefront display names
+- [x] Admin order list page wired to `GET /api/orders/admin`
+- [x] Admin order filters for search, status, page, and limit
+- [ ] Admin order user filter control wired to `GET /api/orders/admin?userId=...`
 - [ ] Admin order detail page wired to `GET /api/orders/admin/:id`
-- [ ] Update order status flow wired to `PATCH /api/orders/:id/status`
-- [ ] Admin user list wired to `GET /api/users/admin/users`
-- [ ] Admin user filters for search, role, page, and limit
-- [ ] Admin user role update wired to `PATCH /api/users/admin/users/:userId/role`
-- [ ] Admin user active/inactive toggle wired to `PATCH /api/users/admin/users/:userId/active`
+- [x] Update order status flow wired to `PATCH /api/orders/:id/status`
+- [x] Admin user list wired to `GET /api/users/admin/users`
+- [x] Admin user filters for search, role, page, and limit
+- [x] Admin user role update wired to `PATCH /api/users/admin/users/:userId/role`
+- [x] Admin user active/inactive toggle wired to `PATCH /api/users/admin/users/:userId/active`
 
 ## Backend Integration Notes
 

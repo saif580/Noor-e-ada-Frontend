@@ -3081,17 +3081,18 @@
 .admin-console {
   display: grid;
   grid-template-columns: 280px minmax(0, 1fr);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: #f7f1e8;
   color: #251c17;
 }
 
 .admin-sidebar {
-  position: sticky;
-  top: 0;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 22px;
   border-right: 1px solid #eadccb;
   background: #251c17;
@@ -3155,6 +3156,9 @@
 .admin-main {
   width: 100%;
   max-width: 1280px;
+  height: 100vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 40px;
 }
 
@@ -3516,13 +3520,19 @@
   .admin-two-column {
     grid-template-columns: 1fr;
   }
+  .admin-console {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
   .admin-login-brand {
     min-height: 420px;
     padding: 36px 24px;
   }
   .admin-sidebar {
-    position: static;
     min-height: auto;
+    height: auto;
+    overflow: visible;
   }
   .admin-sidebar nav {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -3629,6 +3639,8 @@
     grid-template-columns: 1fr;
   }
   .admin-main {
+    height: auto;
+    overflow: visible;
     padding: 28px 16px;
   }
   .admin-page-header h1 {
