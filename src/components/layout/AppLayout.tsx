@@ -95,6 +95,13 @@ export function AppLayout() {
               </span>
               <Link to="/account" className="nav-desktop-only">Account</Link>
               <Link to="/wishlist" className="nav-desktop-only">Wishlist</Link>
+              <button
+                type="button"
+                className="nav-desktop-only nav-logout-button"
+                onClick={() => void handleLogout()}
+              >
+                Sign out
+              </button>
             </>
           ) : (
             <Link to="/login" className="nav-desktop-only">Sign in</Link>

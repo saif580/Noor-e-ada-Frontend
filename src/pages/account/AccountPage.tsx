@@ -1,5 +1,5 @@
 import { type FormEvent, useCallback, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { accountApi, addressToPayload, type AddressPayload, type UpdateProfilePayload } from '../../api/account';
 import { Alert } from '../../components/ui/Alert';
 import { ErrorState, LoadingState } from '../../components/ui/AsyncState';
@@ -42,7 +42,8 @@ const formatDate = (value: string) =>
   new Intl.DateTimeFormat('en-IN', { dateStyle: 'medium' }).format(new Date(value));
 
 export function AccountPage() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
+  const navigate = useNavigate();
 
   const [profile, setProfile] = useState<User | null>(user);
   const [profileDraft, setProfileDraft] = useState<UpdateProfilePayload>(() =>
@@ -185,6 +186,11 @@ export function AccountPage() {
     }
   }
 
+  async function handleLogout() {
+    await logout();
+    navigate('/login');
+  }
+
   if (loading) {
     return (
       <section className="account-page">
@@ -304,6 +310,16 @@ export function AccountPage() {
             )}
           </div>
         </div>
+      </div>
+
+      <div className="account-panel account-session-panel">
+        <div>
+          <h2>Session</h2>
+          <p className="account-muted">Sign out when you are done shopping, especially on a shared device.</p>
+        </div>
+        <button type="button" className="button button-secondary account-logout-button" onClick={() => void handleLogout()}>
+          Sign out
+        </button>
       </div>
 
       <div className="account-panel account-orders-panel">
