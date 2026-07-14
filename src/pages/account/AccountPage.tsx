@@ -208,11 +208,14 @@ export function AccountPage() {
   }
 
   return (
-    <section className="account-page">
-      <div className="account-heading">
-        <span className="eyebrow">My Noor-e-ada</span>
-        <h1>Account</h1>
-        <p>Manage your profile, saved delivery addresses, and order activity.</p>
+    <section className="account-page account-dashboard-page">
+      <div className="account-heading account-dashboard-heading">
+        <div>
+          <span className="eyebrow">My Noor-e-ada</span>
+          <h1>Account</h1>
+          <p>Manage your profile, saved delivery addresses, and order activity.</p>
+        </div>
+        <Link className="button button-secondary account-heading-action" to="/products">Continue shopping</Link>
       </div>
 
       <Alert message={error} type="error" className="account-alert" />
