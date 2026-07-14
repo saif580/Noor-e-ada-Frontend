@@ -3526,8 +3526,14 @@
     overflow: visible;
   }
   .admin-login-brand {
+    order: 2;
     min-height: 420px;
     padding: 36px 24px;
+  }
+  .admin-login-card {
+    order: 1;
+    align-self: start;
+    margin: 24px auto;
   }
   .admin-sidebar {
     min-height: auto;
@@ -3619,14 +3625,23 @@
   .catalog-results .product-grid { grid-template-columns: 1fr; }
 
   .admin-login-brand {
-    min-height: 360px;
-    padding: 28px 18px;
+    min-height: auto;
+    padding: 22px 18px;
   }
   .admin-login-brand h1 {
-    font-size: 38px;
+    margin: 10px 0 10px;
+    font-size: 30px;
+  }
+  .admin-login-brand p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  .admin-login-logo-link img {
+    width: 170px;
   }
   .admin-login-card {
     width: calc(100% - 32px);
+    margin: 16px auto;
     padding: 24px;
   }
   .admin-sidebar {
