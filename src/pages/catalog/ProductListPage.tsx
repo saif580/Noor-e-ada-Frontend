@@ -117,62 +117,80 @@ export function ProductListPage({
     <section className="catalog-page">
       <div className="catalog-layout">
         <aside className="catalog-filter-panel">
-          <div className="account-panel-heading">
-            <h2>Filters</h2>
-            <button type="button" className="account-link-button" onClick={clearFilters}>Clear</button>
+          <div className="catalog-filter-heading">
+            <div>
+              <span>Refine</span>
+              <h2>Filters</h2>
+            </div>
+            <button type="button" onClick={clearFilters}>Reset</button>
           </div>
 
           <form className="catalog-filter-form" onSubmit={applyFilters}>
-            <FormField
-              label="Search"
-              name="q"
-              value={draft.q}
-              onChange={(event) => updateDraft('q', event.target.value)}
-              placeholder="Saree, chikankari, kundan"
-            />
+            <div className="catalog-filter-group">
+              <span className="catalog-filter-label">Find styles</span>
+              <FormField
+                label="Search"
+                name="q"
+                value={draft.q}
+                onChange={(event) => updateDraft('q', event.target.value)}
+                placeholder="Saree, chikankari, kundan"
+              />
 
-            <label className="catalog-select-field">
-              <span>Category</span>
-              <select value={draft.categoryId} onChange={(event) => updateDraft('categoryId', event.target.value)}>
-                <option value="">All categories</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>{category.name}</option>
-                ))}
-              </select>
-            </label>
-
-            <div className="catalog-filter-row">
-              <FormField label="Min price" name="minPrice" type="number" min="0" value={draft.minPrice} onChange={(event) => updateDraft('minPrice', event.target.value)} />
-              <FormField label="Max price" name="maxPrice" type="number" min="0" value={draft.maxPrice} onChange={(event) => updateDraft('maxPrice', event.target.value)} />
+              <label className="catalog-select-field">
+                <span>Category</span>
+                <select value={draft.categoryId} onChange={(event) => updateDraft('categoryId', event.target.value)}>
+                  <option value="">All categories</option>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>{category.name}</option>
+                  ))}
+                </select>
+              </label>
             </div>
 
-            <FormField
-              label="Sizes"
-              name="sizes"
-              value={draft.sizes}
-              onChange={(event) => updateDraft('sizes', event.target.value)}
-              placeholder="S,M,L"
-              hint="Comma separated"
-            />
-            <FormField
-              label="Colors"
-              name="colors"
-              value={draft.colors}
-              onChange={(event) => updateDraft('colors', event.target.value)}
-              placeholder="red,black,gold"
-              hint="Comma separated"
-            />
+            <div className="catalog-filter-group">
+              <span className="catalog-filter-label">Budget</span>
+              <div className="catalog-filter-row">
+                <FormField label="Min price" name="minPrice" type="number" min="0" value={draft.minPrice} onChange={(event) => updateDraft('minPrice', event.target.value)} />
+                <FormField label="Max price" name="maxPrice" type="number" min="0" value={draft.maxPrice} onChange={(event) => updateDraft('maxPrice', event.target.value)} />
+              </div>
+            </div>
 
-            <label className="catalog-select-field">
-              <span>Sort</span>
-              <select value={draft.sort} onChange={(event) => updateDraft('sort', event.target.value)}>
-                {sortOptions.map((option) => (
-                  <option key={option.value} value={option.value}>{option.label}</option>
-                ))}
-              </select>
-            </label>
+            <div className="catalog-filter-group">
+              <span className="catalog-filter-label">Details</span>
+              <FormField
+                label="Sizes"
+                name="sizes"
+                value={draft.sizes}
+                onChange={(event) => updateDraft('sizes', event.target.value)}
+                placeholder="S,M,L"
+                hint="Comma separated"
+              />
+              <FormField
+                label="Colors"
+                name="colors"
+                value={draft.colors}
+                onChange={(event) => updateDraft('colors', event.target.value)}
+                placeholder="red,black,gold"
+                hint="Comma separated"
+              />
+            </div>
 
-            <button type="submit" className="button button-primary">Apply filters</button>
+            <div className="catalog-filter-group">
+              <span className="catalog-filter-label">Sort results</span>
+              <label className="catalog-select-field">
+                <span>Sort</span>
+                <select value={draft.sort} onChange={(event) => updateDraft('sort', event.target.value)}>
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </select>
+              </label>
+            </div>
+
+            <div className="catalog-filter-actions">
+              <button type="submit" className="button button-primary">Apply filters</button>
+              <button type="button" className="catalog-filter-secondary" onClick={clearFilters}>Clear all</button>
+            </div>
           </form>
         </aside>
 
