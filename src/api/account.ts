@@ -1,5 +1,6 @@
 import { mapUser } from './auth';
 import { apiClient } from '../lib/apiClient';
+import { getDisplayProductName } from '../lib/catalogDisplay';
 import type { Address, Order, OrderItem, User } from '../types/domain';
 
 interface BackendUser {
@@ -134,7 +135,7 @@ function mapOrderItem(item: BackendOrderItem): OrderItem {
     id: String(item.id),
     productId: String(item.product_id),
     variantId: item.variant_id == null ? undefined : String(item.variant_id),
-    productName: item.product_name,
+    productName: getDisplayProductName(String(item.product_id), item.product_name),
     productSlug: item.product_slug,
     sku: item.variant_sku,
     variantSku: item.variant_sku,

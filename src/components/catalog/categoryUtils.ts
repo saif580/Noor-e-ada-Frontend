@@ -34,3 +34,13 @@ export function getCategoryImageUrl(category: Category, index = 0): string {
 
   return fallbackCategoryImages[index % fallbackCategoryImages.length];
 }
+
+export function getCategoryKicker(category: Category): string {
+  const text = `${category.name} ${category.description ?? ''}`.toLowerCase();
+  if (text.includes('sale') || text.includes('offer')) return 'Seasonal edit';
+  if (text.includes('stock') || text.includes('last chance')) return 'Limited availability';
+  if (text.includes('wedding') || text.includes('bridal')) return 'Wedding edit';
+  if (text.includes('saree')) return 'Drapes & classics';
+  if (text.includes('kurta') || text.includes('cotton')) return 'Everyday ethnic';
+  return 'Curated collection';
+}

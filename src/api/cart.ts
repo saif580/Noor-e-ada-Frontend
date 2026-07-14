@@ -1,5 +1,6 @@
 import { mapOrder } from './account';
 import { apiClient } from '../lib/apiClient';
+import { decorateProduct } from '../lib/catalogDisplay';
 import type { Cart, CartItem, Order, Product, ProductVariant } from '../types/domain';
 
 interface BackendCartItem {
@@ -99,7 +100,7 @@ function notifyCartUpdated(cart: Cart) {
 }
 
 function mapCartItem(item: BackendCartItem): CartItem {
-  const product: Product = {
+  const product: Product = decorateProduct({
     id: String(item.product.id),
     name: item.product.name,
     slug: item.product.slug,
@@ -107,7 +108,7 @@ function mapCartItem(item: BackendCartItem): CartItem {
     isActive: item.product.is_active,
     images: [],
     variants: [],
-  };
+  });
 
   const variant: ProductVariant = {
     id: String(item.variant.id),

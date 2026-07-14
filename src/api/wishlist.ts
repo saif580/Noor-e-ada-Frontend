@@ -1,4 +1,5 @@
 import { apiClient } from '../lib/apiClient';
+import { decorateProduct } from '../lib/catalogDisplay';
 import type { Product, WishlistItem } from '../types/domain';
 
 interface BackendWishlistItem {
@@ -25,7 +26,7 @@ interface BackendWishlist {
 }
 
 function mapWishlistProduct(item: BackendWishlistItem): Product {
-  return {
+  return decorateProduct({
     id: String(item.product.id),
     name: item.product.name,
     slug: item.product.slug,
@@ -43,7 +44,7 @@ function mapWishlistProduct(item: BackendWishlistItem): Product {
         }]
       : [],
     variants: [],
-  };
+  });
 }
 
 function mapWishlistItem(item: BackendWishlistItem): WishlistItem {

@@ -1,4 +1,5 @@
 import { apiClient } from '../lib/apiClient';
+import { decorateCategory, decorateProduct } from '../lib/catalogDisplay';
 import type { Category, PaginatedResponse, Product, ProductImage, ProductVariant } from '../types/domain';
 
 export type CatalogSort = 'newest' | 'price_asc' | 'price_desc' | 'popularity';
@@ -101,7 +102,7 @@ const toNumber = (value: number | string | undefined | null) =>
   value === undefined || value === null ? undefined : Number(value);
 
 export function mapCategory(category: BackendCategory): Category {
-  return {
+  return decorateCategory({
     id: String(category.id),
     name: category.name,
     slug: category.slug,
@@ -111,7 +112,7 @@ export function mapCategory(category: BackendCategory): Category {
     isActive: category.is_active,
     createdAt: category.created_at,
     updatedAt: category.updated_at,
-  };
+  });
 }
 
 function mapImage(image: BackendProductImage, index: number): ProductImage {
@@ -156,7 +157,7 @@ function mapAttributes(attributes: BackendProductAttribute[]) {
 }
 
 export function mapProduct(product: BackendProduct): Product {
-  return {
+  return decorateProduct({
     id: String(product.id),
     categoryId: product.category_id == null ? undefined : String(product.category_id),
     categoryName: product.category_name,
@@ -177,7 +178,7 @@ export function mapProduct(product: BackendProduct): Product {
     attributes: mapAttributes(product.attributes ?? []),
     createdAt: product.created_at,
     updatedAt: product.updated_at,
-  };
+  });
 }
 
 const appendParam = (params: URLSearchParams, key: string, value?: string | number) => {

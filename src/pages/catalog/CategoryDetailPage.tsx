@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { catalogApi } from '../../api/catalog';
-import { getCategoryImageUrl } from '../../components/catalog/categoryUtils';
+import { getCategoryImageUrl, getCategoryKicker } from '../../components/catalog/categoryUtils';
 import { ProductCard } from '../../components/catalog/ProductCard';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { useWishlistState } from '../../hooks/useWishlistState';
@@ -70,7 +70,7 @@ export function CategoryDetailPage() {
       <div className="collection-detail-hero">
         <div className="account-heading">
           <Link to="/collections" className="account-back-link">Back to collections</Link>
-          <span className="eyebrow">{category.slug}</span>
+          <span className="eyebrow">{getCategoryKicker(category)}</span>
           <h1>{category.name}</h1>
           <p>{category.description ?? 'Explore the latest pieces in this Noor-e-ada collection.'}</p>
         </div>

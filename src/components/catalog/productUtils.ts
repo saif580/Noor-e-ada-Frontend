@@ -25,15 +25,15 @@ export interface ProductMediaItem {
 const productDescriptions: Record<string, string> = {
   '1': 'A breathable linen day dress with a relaxed ethnic silhouette, finished for warm-weather comfort and easy festive styling.',
   '2': 'An evening-ready gown with a soft fall, clean neckline, and polished finish for receptions, dinners, and celebration wear.',
-  '3': 'A versatile cotton tee designed as an everyday layering piece for casual edits, travel looks, and relaxed styling.',
-  '4': 'A test-ready cart product with a balanced fit and simple styling, useful for validating purchase and checkout flows.',
-  '5': 'A ready-to-order festive style prepared for order-flow testing, with a clean drape and occasion-friendly finish.',
-  '6': 'A second order-flow sample style for checking quantities, totals, and customer order history behavior.',
-  '7': 'A stock-status sample product that helps validate availability labels, wishlist saves, and catalog state changes.',
-  '9': 'An inventory sample product used to confirm variant stock behavior, cart updates, and checkout reservation handling.',
-  '10': 'A stock-check sample style for testing low inventory, checkout holds, and product detail availability states.',
-  '11': 'A coupon-ready product for validating discounts, order totals, and promotional checkout behavior.',
-  '12': 'A promotional test product for checking coupon modes, payment totals, and campaign-specific pricing behavior.',
+  '3': 'A versatile black cotton kurta top designed for casual edits, travel looks, and relaxed daily styling.',
+  '4': 'A coordinated indigo set with soft structure, breathable fabric, and a polished print for easy day-to-evening wear.',
+  '5': 'A maroon festive anarkali set with a graceful flare, subtle detail, and celebration-ready finish.',
+  '6': 'An ivory chikankari-inspired anarkali set with a soft dupatta and refined texture for wedding guest dressing.',
+  '7': 'A charcoal silk-blend dupatta with a refined border, designed to lift simple kurtas and festive separates.',
+  '9': 'A black straight kurta in breathable cotton with a neat neckline and versatile length for repeated wear.',
+  '10': 'A noir kurta set with a light Chanderi-inspired finish, tailored pants, and a polished occasion look.',
+  '11': 'A soft blush saree with delicate print work and an easy drape for gifting, dinners, and festive styling.',
+  '12': 'A blue anarkali set with a flattering flare, comfortable lining, and a coordinated dupatta for festive occasions.',
 };
 
 const sampleProductGallery: Record<string, string[]> = {

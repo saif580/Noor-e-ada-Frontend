@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { catalogApi } from '../../api/catalog';
-import { getCategoryImageUrl } from '../../components/catalog/categoryUtils';
+import { getCategoryImageUrl, getCategoryKicker } from '../../components/catalog/categoryUtils';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { ApiError } from '../../lib/apiClient';
 import type { Category } from '../../types/domain';
@@ -62,7 +62,7 @@ export function CategoryListPage() {
                 aria-hidden="true"
                 loading="lazy"
               />
-              <span>{category.slug}</span>
+              <span>{getCategoryKicker(category)}</span>
               <strong>{category.name}</strong>
               <small>Shop now</small>
             </Link>
