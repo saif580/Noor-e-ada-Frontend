@@ -17,6 +17,21 @@ const matchTermsByProductName: Record<string, string[]> = {
 const findAvailableVariant = (product?: Product) =>
   product?.variants.find((variant) => variant.isActive !== false && variant.stockQuantity > 0);
 
+const findHomeProductMatch = (homeProductName: string, index: number, products: Product[]) => {
+  const terms = matchTermsByProductName[homeProductName] ?? [];
+  const matched = products.find((product) => {
+    const searchable = `${product.name} ${product.categoryName ?? ''} ${product.description ?? ''}`.toLowerCase();
+    return terms.some((term) => searchable.includes(term));
+  });
+
+  if (matched && findAvailableVariant(matched)) return matched;
+
+  const indexedFallback = products[index];
+  if (indexedFallback && findAvailableVariant(indexedFallback)) return indexedFallback;
+
+  return products.find((product) => findAvailableVariant(product));
+};
+
 export function BestsellersSection() {
   const { isAuthenticated } = useAuth();
   const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
@@ -39,29 +54,28 @@ export function BestsellersSection() {
     };
   }, []);
 
-  const productMatches = useMemo(() => PRODUCTS.map((homeProduct, index) => {
-    const terms = matchTermsByProductName[homeProduct.name] ?? [];
-    const matched = catalogProducts.find((product) => {
-      const searchable = `${product.name} ${product.categoryName ?? ''} ${product.description ?? ''}`.toLowerCase();
-      return terms.some((term) => searchable.includes(term));
-    });
-
-    return matched ?? catalogProducts[index];
-  }), [catalogProducts]);
+  const productMatches = useMemo(() => PRODUCTS.map((homeProduct, index) =>
+    findHomeProductMatch(homeProduct.name, index, catalogProducts)), [catalogProducts]);
 
   async function addHomeProduct(index: number) {
-    const product = productMatches[index];
-    const variant = findAvailableVariant(product);
-
-    if (!product || !variant) {
-      setMessages((current) => ({ ...current, [index]: 'Currently unavailable' }));
-      return;
-    }
-
     setAddingIndex(index);
     setMessages((current) => ({ ...current, [index]: '' }));
 
     try {
+      const products = catalogProducts.length > 0
+        ? catalogProducts
+        : (await catalogApi.listProducts({ sort: 'popularity', limit: 12 })).items;
+
+      if (catalogProducts.length === 0) setCatalogProducts(products);
+
+      const product = productMatches[index] ?? findHomeProductMatch(PRODUCTS[index].name, index, products);
+      const variant = findAvailableVariant(product);
+
+      if (!product || !variant) {
+        setMessages((current) => ({ ...current, [index]: 'Currently unavailable' }));
+        return;
+      }
+
       if (isAuthenticated) await cartApi.addItem(variant.id, 1);
       else guestCart.addItem(product, variant, 1);
       setMessages((current) => ({ ...current, [index]: 'Added to cart' }));
