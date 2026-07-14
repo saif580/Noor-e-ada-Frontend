@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { catalogApi } from '../../api/catalog';
+import { getCategoryImageUrl } from '../../components/catalog/categoryUtils';
 import { EmptyState, ErrorState, LoadingState } from '../../components/ui/AsyncState';
 import { ApiError } from '../../lib/apiClient';
 import type { Category } from '../../types/domain';
@@ -54,6 +55,13 @@ export function CategoryListPage() {
               to={`/collections/${category.id}`}
               className={`category-card ${tones[index % tones.length]}`}
             >
+              <img
+                className="category-img"
+                src={getCategoryImageUrl(category, index)}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
               <span>{category.slug}</span>
               <strong>{category.name}</strong>
               <small>Shop now</small>
