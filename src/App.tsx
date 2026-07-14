@@ -26,6 +26,8 @@ import { CartPage } from './pages/cart/CartPage';
 import { CheckoutPage } from './pages/cart/CheckoutPage';
 import { OrderSuccessPage } from './pages/cart/OrderSuccessPage';
 import { WishlistPage } from './pages/wishlist/WishlistPage';
+import { AdminLoginPage } from './pages/admin/AdminLoginPage';
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
 
 import './App.css';
 
@@ -41,6 +43,13 @@ function App() {
           <Route path="/resend-verification"  element={<ResendVerificationPage />} />
           <Route path="/forgot-password"      element={<ForgotPasswordPage />} />
           <Route path="/reset-password"       element={<ResetPasswordPage />} />
+          <Route path="/admin/login"          element={<AdminLoginPage />} />
+
+          {/* ── Standalone admin console ── */}
+          <Route element={<AdminRoute />}>
+            <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/:section" element={<AdminDashboardPage />} />
+          </Route>
 
           {/* ── Main app shell ── */}
           <Route element={<AppLayout />}>
@@ -85,11 +94,6 @@ function App() {
               <Route path="/orders"   element={<OrdersPage />} />
               <Route path="/orders/:id" element={<OrderDetailsPage />} />
               <Route path="/wishlist" element={<WishlistPage />} />
-            </Route>
-
-            {/* Admin-only routes */}
-            <Route element={<AdminRoute />}>
-              <Route path="/admin" element={<div className="auth-page"><p>Admin (coming soon)</p></div>} />
             </Route>
           </Route>
         </Routes>

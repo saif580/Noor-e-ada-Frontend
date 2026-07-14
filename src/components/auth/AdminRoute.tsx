@@ -6,7 +6,7 @@ import { LoadingState } from '../ui/AsyncState';
 
 /**
  * Wraps routes that require backend-confirmed admin access.
- * Redirects non-admins to home, unauthenticated users to /login.
+ * Redirects non-admins to home, unauthenticated users to /admin/login.
  */
 export function AdminRoute() {
   const { user, isLoading } = useAuth();
@@ -40,7 +40,7 @@ export function AdminRoute() {
   }
 
   if (!user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/admin/login" state={{ from: location }} replace />;
   }
 
   if (user.role !== 'admin') {
