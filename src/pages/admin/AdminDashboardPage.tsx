@@ -452,7 +452,7 @@ export function AdminDashboardPage() {
     <>
       <AdminHeader eyebrow="Fulfillment" title="Orders" description="Search orders and move them through fulfillment statuses." />
       <section className="admin-panel">
-        <form className="admin-toolbar admin-order-filter" onSubmit={(event) => { event.preventDefault(); void loadAdminData(); }}>
+        <form className="admin-toolbar admin-filter-strip" onSubmit={(event) => { event.preventDefault(); void loadAdminData(); }}>
           <label className="admin-filter-field admin-filter-search">
             <span>Search</span>
             <input value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} placeholder="Order number or customer email" />
@@ -497,14 +497,32 @@ export function AdminDashboardPage() {
     <>
       <AdminHeader eyebrow="Access" title="Customers" description="Review customers, promote admins, or deactivate risky accounts." />
       <section className="admin-panel">
-        <form className="admin-toolbar" onSubmit={(event) => { event.preventDefault(); void loadAdminData(); }}>
-          <input value={userSearch} onChange={(event) => setUserSearch(event.target.value)} placeholder="Search name or email" />
-          <select value={userRole} onChange={(event) => setUserRole(event.target.value as UserRole | '')}>
-            <option value="">All roles</option>
-            <option value="customer">Customer</option>
-            <option value="admin">Admin</option>
-          </select>
-          <button className="button button-secondary" type="submit">Apply</button>
+        <form className="admin-toolbar admin-filter-strip" onSubmit={(event) => { event.preventDefault(); void loadAdminData(); }}>
+          <label className="admin-filter-field admin-filter-search">
+            <span>Search</span>
+            <input value={userSearch} onChange={(event) => setUserSearch(event.target.value)} placeholder="Customer name or email" />
+          </label>
+          <label className="admin-filter-field">
+            <span>Role</span>
+            <select value={userRole} onChange={(event) => setUserRole(event.target.value as UserRole | '')}>
+              <option value="">All roles</option>
+              <option value="customer">Customer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </label>
+          <div className="admin-filter-actions">
+            <button className="button button-secondary" type="submit">Apply filters</button>
+            <button
+              className="button button-secondary admin-filter-clear"
+              type="button"
+              onClick={() => {
+                setUserSearch('');
+                setUserRole('');
+              }}
+            >
+              Clear
+            </button>
+          </div>
         </form>
         <div className="admin-table">
           {users.map((item) => (
