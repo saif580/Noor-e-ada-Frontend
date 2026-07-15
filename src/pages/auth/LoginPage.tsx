@@ -1,13 +1,15 @@
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 import { Alert } from '../../components/ui/Alert';
 import { useAuth } from '../../hooks/useAuth';
 import { ApiError } from '../../lib/apiClient';
 import { FormField } from '../../components/ui/FormField';
+import { env } from '../../config/env';
 import logoMark from '../../assets/logo.svg';
 
 export function LoginPage() {
-  const { login, isAuthenticated } = useAuth();
+  const { login, loginWithGoogle, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -23,6 +25,23 @@ export function LoginPage() {
   useEffect(() => {
     if (isAuthenticated) navigate(from, { replace: true });
   }, [isAuthenticated, navigate, from]);
+
+  const handleGoogleCredential = useCallback(async (idToken: string) => {
+    setError('');
+    setSubmitting(true);
+    try {
+      await loginWithGoogle(idToken);
+      navigate(from, { replace: true });
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else {
+        setError('Google sign-in failed. Please try again.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }, [from, loginWithGoogle, navigate]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -92,6 +111,17 @@ export function LoginPage() {
           />
 
           <Alert message={error} type="error" />
+
+          {env.googleClientId && (
+            <>
+              <GoogleAuthButton
+                label="signin_with"
+                onCredential={handleGoogleCredential}
+                onError={setError}
+              />
+              <div className="auth-divider auth-divider-text"><span>or sign in with email</span></div>
+            </>
+          )}
 
           <form className="auth-form" onSubmit={handleSubmit} noValidate>
             <FormField

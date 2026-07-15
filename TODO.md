@@ -29,8 +29,9 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [x] Reset password page wired to `POST /api/auth/reset-password`
 - [x] Protected routes for customer account and checkout
 - [x] Admin-only route guard using `GET /api/users/admin/access`
-- [ ] Add OAuth sign-in buttons after backend OAuth endpoints exist
-- [ ] Merge OAuth login into the existing `AuthProvider` token/session flow
+- [x] Add Google OAuth sign-in/sign-up buttons on login and register pages
+- [x] Merge Google OAuth login into the existing `AuthProvider` token/session flow
+- [ ] Configure `VITE_GOOGLE_CLIENT_ID` in local, Vercel UAT, and future production envs
 
 ## Catalog
 
@@ -142,6 +143,7 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [x] Create UAT backend service from the backend GitHub repo
 - [x] Configure frontend UAT branch tracking from `uat`
 - [x] Configure frontend UAT env: `VITE_API_BASE_URL=https://noor-e-ada-backend-uat.onrender.com/api`
+- [ ] Configure frontend UAT env: `VITE_GOOGLE_CLIENT_ID=<Google OAuth web client id>`
 - [x] Configure backend UAT env: `APP_ENV=uat`
 - [x] Configure backend UAT env: `APP_BASE_URL=https://noor-e-ada-backend-uat.onrender.com`
 - [ ] Configure backend UAT env: `FRONTEND_URL=https://<uat-frontend>`

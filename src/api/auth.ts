@@ -41,6 +41,10 @@ export interface RegisterPayload {
   isMarketingOptIn?: boolean;
 }
 
+export interface GoogleLoginPayload {
+  idToken: string;
+}
+
 /* ── Response shapes ── */
 export interface AuthTokens {
   accessToken: string;
@@ -61,6 +65,15 @@ interface RegisterData {
 export const authApi = {
   async login(payload: LoginPayload): Promise<{ user: User } & AuthTokens> {
     const res = await apiClient.post<LoginData>('/auth/login', payload, { skipAuth: true });
+    return {
+      user: mapUser(res.data.user),
+      accessToken: res.data.accessToken,
+      refreshToken: res.data.refreshToken,
+    };
+  },
+
+  async loginWithGoogle(payload: GoogleLoginPayload): Promise<{ user: User } & AuthTokens> {
+    const res = await apiClient.post<LoginData>('/auth/google', payload, { skipAuth: true });
     return {
       user: mapUser(res.data.user),
       accessToken: res.data.accessToken,

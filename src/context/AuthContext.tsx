@@ -27,6 +27,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(loggedInUser);
   }, []);
 
+  const loginWithGoogle = useCallback(async (idToken: string) => {
+    const { user: loggedInUser, accessToken, refreshToken } = await authApi.loginWithGoogle({ idToken });
+    tokenStorage.setTokens(accessToken, refreshToken);
+    tokenStorage.setUser(loggedInUser);
+    try {
+      await guestCart.mergeIntoAccount();
+    } catch {
+      // Do not block login if a saved guest-cart item is no longer available.
+    }
+    setUser(loggedInUser);
+  }, []);
+
   const register = useCallback(async (payload: RegisterPayload) => {
     await authApi.register(payload);
     // Backend sends a verification email; user is not logged in yet
@@ -55,11 +67,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated: user !== null,
       isLoading: false,
       login,
+      loginWithGoogle,
       register,
       logout,
       updateUser,
     }),
-    [user, login, register, logout, updateUser],
+    [user, login, loginWithGoogle, register, logout, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

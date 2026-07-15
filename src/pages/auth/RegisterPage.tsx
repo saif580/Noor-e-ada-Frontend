@@ -1,13 +1,15 @@
-import { type FormEvent, useEffect, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 import { Alert } from '../../components/ui/Alert';
 import { useAuth } from '../../hooks/useAuth';
 import { ApiError } from '../../lib/apiClient';
 import { FormField } from '../../components/ui/FormField';
+import { env } from '../../config/env';
 import logoMark from '../../assets/logo.svg';
 
 export function RegisterPage() {
-  const { register, isAuthenticated } = useAuth();
+  const { register, loginWithGoogle, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -33,6 +35,23 @@ export function RegisterPage() {
         ...prev,
         [field]: e.target.type === 'checkbox' ? e.target.checked : e.target.value,
       }));
+
+  const handleGoogleCredential = useCallback(async (idToken: string) => {
+    setError('');
+    setSubmitting(true);
+    try {
+      await loginWithGoogle(idToken);
+      navigate('/', { replace: true });
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else {
+        setError('Google sign-up failed. Please try again.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }, [loginWithGoogle, navigate]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -101,6 +120,17 @@ export function RegisterPage() {
           </p>
 
           <Alert message={error} type="error" />
+
+          {env.googleClientId && (
+            <>
+              <GoogleAuthButton
+                label="signup_with"
+                onCredential={handleGoogleCredential}
+                onError={setError}
+              />
+              <div className="auth-divider auth-divider-text"><span>or create account with email</span></div>
+            </>
+          )}
 
           <form className="auth-form" onSubmit={handleSubmit} noValidate>
 
