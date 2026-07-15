@@ -10,6 +10,10 @@
     color-scheme: light;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-x: clip;
     font-size: 15px;
     line-height: 1.6;
     background: #fffaf3;
@@ -17,10 +21,20 @@
 
   body {
     margin: 0;
+    width: 100%;
+    max-width: 100%;
     overflow-x: hidden;
+    overflow-x: clip;
     background: #fffaf3;
     color: #251c17;
     font-family: var(--font-sans);
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   *,

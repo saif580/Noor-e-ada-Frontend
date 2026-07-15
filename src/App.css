@@ -8,6 +8,9 @@
 /* ─── SITE SHELL ─────────────────────────── */
 .site-shell {
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
   background: #fffaf3;
   color: #251c17;
   position: relative;
@@ -38,6 +41,22 @@
   background: rgba(255, 250, 243, 0.92);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+
+.top-bar,
+.hero-section,
+.section-block,
+.benefit-strip,
+.story-band,
+.newsletter-section,
+.site-footer,
+.account-page,
+.catalog-page,
+.cart-page,
+.wishlist-page,
+.admin-login-page,
+.admin-console {
+  max-width: 100%;
 }
 
 .brand-link,
@@ -3596,11 +3615,26 @@
 
 /* ── 480px  Small phone ── */
 @media (max-width: 480px) {
-  .top-bar    { padding: 0 16px; }
-  .brand-mark { width: 210px; height: 42px; flex: 0 0 210px; }
+  .top-bar {
+    width: 100%;
+    max-width: 100%;
+    padding: 0 14px;
+    overflow: hidden;
+  }
+  .brand-link { min-width: 0; }
+  .brand-mark {
+    width: min(196px, calc(100vw - 86px));
+    height: 42px;
+    flex: 0 1 min(196px, calc(100vw - 86px));
+    min-width: 0;
+  }
 
   /* Hero */
-  .hero-section { padding: 32px 16px 28px; gap: 28px; }
+  .hero-section {
+    overflow: hidden;
+    padding: 32px 16px 28px;
+    gap: 28px;
+  }
   .hero-copy h1 { font-size: clamp(30px, 8vw, 44px); }
   .hero-copy p  { font-size: 15px; }
 
@@ -3618,9 +3652,9 @@
   .hero-metrics div:last-child { border-bottom: none; padding-bottom: 0; }
 
   /* Showcase */
-  .hero-showcase         { min-height: 360px; }
+  .hero-showcase         { min-height: 360px; overflow: hidden; }
   .showcase-large        { left: 0; width: 80%; height: 320px; }
-  .showcase-small        { width: 148px; height: 146px; }
+  .showcase-small        { right: 0; width: min(148px, 42vw); height: 146px; }
   .showcase-small.top    { top: 40px; }
   .showcase-small.bottom { bottom: 12px; }
   .showcase-card strong  { font-size: 20px; }
@@ -3657,6 +3691,7 @@
   }
   .admin-login-card {
     width: calc(100% - 32px);
+    max-width: 100%;
     margin: 16px auto;
     padding: 24px;
   }
