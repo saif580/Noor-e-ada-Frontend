@@ -1,10 +1,6 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { cartApi } from '../../api/cart';
 import { catalogApi } from '../../api/catalog';
 import { PRODUCTS } from '../../data/home';
-import { useAuth } from '../../hooks/useAuth';
-import { ApiError } from '../../lib/apiClient';
-import { guestCart } from '../../lib/guestCart';
 import type { Product } from '../../types/domain';
 
 const matchTermsByProductName: Record<string, string[]> = {
@@ -33,10 +29,7 @@ const findHomeProductMatch = (homeProductName: string, index: number, products: 
 };
 
 export function BestsellersSection() {
-  const { isAuthenticated } = useAuth();
   const [catalogProducts, setCatalogProducts] = useState<Product[]>([]);
-  const [addingIndex, setAddingIndex] = useState<number | null>(null);
-  const [messages, setMessages] = useState<Record<number, string>>({});
 
   useEffect(() => {
     let mounted = true;
@@ -56,38 +49,6 @@ export function BestsellersSection() {
 
   const productMatches = useMemo(() => PRODUCTS.map((homeProduct, index) =>
     findHomeProductMatch(homeProduct.name, index, catalogProducts)), [catalogProducts]);
-
-  async function addHomeProduct(index: number) {
-    setAddingIndex(index);
-    setMessages((current) => ({ ...current, [index]: '' }));
-
-    try {
-      const products = catalogProducts.length > 0
-        ? catalogProducts
-        : (await catalogApi.listProducts({ sort: 'popularity', limit: 12 })).items;
-
-      if (catalogProducts.length === 0) setCatalogProducts(products);
-
-      const product = productMatches[index] ?? findHomeProductMatch(PRODUCTS[index].name, index, products);
-      const variant = findAvailableVariant(product);
-
-      if (!product || !variant) {
-        setMessages((current) => ({ ...current, [index]: 'Currently unavailable' }));
-        return;
-      }
-
-      if (isAuthenticated) await cartApi.addItem(variant.id, 1);
-      else guestCart.addItem(product, variant, 1);
-      setMessages((current) => ({ ...current, [index]: 'Added to cart' }));
-    } catch (err) {
-      setMessages((current) => ({
-        ...current,
-        [index]: err instanceof ApiError ? err.message : 'Could not add',
-      }));
-    } finally {
-      setAddingIndex(null);
-    }
-  }
 
   return (
     <section id="bestsellers" className="section-block products-section">
@@ -117,17 +78,9 @@ export function BestsellersSection() {
                 <strong>{product.price}</strong>
                 <del>{product.oldPrice}</del>
               </div>
-              <button type="button" onClick={() => void addHomeProduct(index)} disabled={addingIndex === index}>
-                {addingIndex === index ? 'Adding...' : 'Add to cart'}
-              </button>
-              {messages[index] && (
-                <small
-                  className={`home-card-status ${messages[index] === 'Added to cart' ? 'is-success' : 'is-error'}`}
-                  aria-live="polite"
-                >
-                  {messages[index]}
-                </small>
-              )}
+              <a className="home-product-link" href={productMatches[index] ? `/products/${productMatches[index]?.id}` : '/products?sort=popularity'}>
+                View details
+              </a>
             </div>
           </article>
         ))}
