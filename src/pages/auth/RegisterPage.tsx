@@ -1,5 +1,6 @@
 import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { FacebookAuthButton } from '../../components/auth/FacebookAuthButton';
 import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 import { Alert } from '../../components/ui/Alert';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,8 +10,9 @@ import { env } from '../../config/env';
 import logoMark from '../../assets/logo.svg';
 
 export function RegisterPage() {
-  const { register, loginWithGoogle, isAuthenticated } = useAuth();
+  const { register, loginWithGoogle, loginWithFacebook, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const hasSocialLogin = Boolean(env.googleClientId || env.facebookAppId);
 
   const [form, setForm] = useState({
     firstName: '',
@@ -52,6 +54,23 @@ export function RegisterPage() {
       setSubmitting(false);
     }
   }, [loginWithGoogle, navigate]);
+
+  const handleFacebookCredential = useCallback(async (accessToken: string) => {
+    setError('');
+    setSubmitting(true);
+    try {
+      await loginWithFacebook(accessToken);
+      navigate('/', { replace: true });
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else {
+        setError('Facebook sign-up failed. Please try again.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }, [loginWithFacebook, navigate]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -121,13 +140,20 @@ export function RegisterPage() {
 
           <Alert message={error} type="error" />
 
-          {env.googleClientId && (
+          {hasSocialLogin && (
             <>
+              <div className="oauth-stack">
+                <FacebookAuthButton
+                  disabled={submitting}
+                  onCredential={handleFacebookCredential}
+                  onError={setError}
+                />
               <GoogleAuthButton
                 label="signup_with"
                 onCredential={handleGoogleCredential}
                 onError={setError}
               />
+              </div>
               <div className="auth-divider auth-divider-text"><span>or create account with email</span></div>
             </>
           )}

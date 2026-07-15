@@ -30,8 +30,12 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [x] Protected routes for customer account and checkout
 - [x] Admin-only route guard using `GET /api/users/admin/access`
 - [x] Add Google OAuth sign-in/sign-up buttons on login and register pages
+- [x] Add Facebook OAuth sign-in/sign-up button on login and register pages
 - [x] Merge Google OAuth login into the existing `AuthProvider` token/session flow
+- [x] Merge Facebook OAuth login into the existing `AuthProvider` token/session flow
 - [ ] Configure `VITE_GOOGLE_CLIENT_ID` in local, Vercel UAT, and future production envs
+- [ ] Configure `VITE_FACEBOOK_APP_ID` in local, Vercel UAT, and future production envs
+- [ ] Revisit Instagram only as a business-account integration, not standard customer login
 
 ## Catalog
 
@@ -144,6 +148,7 @@ Build the Noor-e-ada ecommerce frontend against the backend API.
 - [x] Configure frontend UAT branch tracking from `uat`
 - [x] Configure frontend UAT env: `VITE_API_BASE_URL=https://noor-e-ada-backend-uat.onrender.com/api`
 - [ ] Configure frontend UAT env: `VITE_GOOGLE_CLIENT_ID=<Google OAuth web client id>`
+- [ ] Configure frontend UAT env: `VITE_FACEBOOK_APP_ID=<Meta app id>`
 - [x] Configure backend UAT env: `APP_ENV=uat`
 - [x] Configure backend UAT env: `APP_BASE_URL=https://noor-e-ada-backend-uat.onrender.com`
 - [ ] Configure backend UAT env: `FRONTEND_URL=https://<uat-frontend>`

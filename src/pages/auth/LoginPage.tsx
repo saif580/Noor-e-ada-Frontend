@@ -1,5 +1,6 @@
 import { type FormEvent, useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FacebookAuthButton } from '../../components/auth/FacebookAuthButton';
 import { GoogleAuthButton } from '../../components/auth/GoogleAuthButton';
 import { Alert } from '../../components/ui/Alert';
 import { useAuth } from '../../hooks/useAuth';
@@ -9,9 +10,10 @@ import { env } from '../../config/env';
 import logoMark from '../../assets/logo.svg';
 
 export function LoginPage() {
-  const { login, loginWithGoogle, isAuthenticated } = useAuth();
+  const { login, loginWithGoogle, loginWithFacebook, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const hasSocialLogin = Boolean(env.googleClientId || env.facebookAppId);
 
   const registeredMsg = new URLSearchParams(location.search).get('registered');
   const resetMsg      = new URLSearchParams(location.search).get('reset');
@@ -42,6 +44,23 @@ export function LoginPage() {
       setSubmitting(false);
     }
   }, [from, loginWithGoogle, navigate]);
+
+  const handleFacebookCredential = useCallback(async (accessToken: string) => {
+    setError('');
+    setSubmitting(true);
+    try {
+      await loginWithFacebook(accessToken);
+      navigate(from, { replace: true });
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setError(err.message);
+      } else {
+        setError('Facebook sign-in failed. Please try again.');
+      }
+    } finally {
+      setSubmitting(false);
+    }
+  }, [from, loginWithFacebook, navigate]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -112,13 +131,20 @@ export function LoginPage() {
 
           <Alert message={error} type="error" />
 
-          {env.googleClientId && (
+          {hasSocialLogin && (
             <>
+              <div className="oauth-stack">
+                <FacebookAuthButton
+                  disabled={submitting}
+                  onCredential={handleFacebookCredential}
+                  onError={setError}
+                />
               <GoogleAuthButton
                 label="signin_with"
                 onCredential={handleGoogleCredential}
                 onError={setError}
               />
+              </div>
               <div className="auth-divider auth-divider-text"><span>or sign in with email</span></div>
             </>
           )}

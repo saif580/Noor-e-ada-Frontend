@@ -14,9 +14,7 @@ const getInitialUser = (): User | null => {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => getInitialUser());
 
-  const login = useCallback(async (email: string, password: string) => {
-    const payload: LoginPayload = { email, password };
-    const { user: loggedInUser, accessToken, refreshToken } = await authApi.login(payload);
+  const completeLogin = useCallback(async (loggedInUser: User, accessToken: string, refreshToken: string) => {
     tokenStorage.setTokens(accessToken, refreshToken);
     tokenStorage.setUser(loggedInUser);
     try {
@@ -27,17 +25,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(loggedInUser);
   }, []);
 
+  const login = useCallback(async (email: string, password: string) => {
+    const payload: LoginPayload = { email, password };
+    const { user: loggedInUser, accessToken, refreshToken } = await authApi.login(payload);
+    await completeLogin(loggedInUser, accessToken, refreshToken);
+  }, [completeLogin]);
+
   const loginWithGoogle = useCallback(async (idToken: string) => {
     const { user: loggedInUser, accessToken, refreshToken } = await authApi.loginWithGoogle({ idToken });
-    tokenStorage.setTokens(accessToken, refreshToken);
-    tokenStorage.setUser(loggedInUser);
-    try {
-      await guestCart.mergeIntoAccount();
-    } catch {
-      // Do not block login if a saved guest-cart item is no longer available.
-    }
-    setUser(loggedInUser);
-  }, []);
+    await completeLogin(loggedInUser, accessToken, refreshToken);
+  }, [completeLogin]);
+
+  const loginWithFacebook = useCallback(async (accessToken: string) => {
+    const { user: loggedInUser, accessToken: appAccessToken, refreshToken } = await authApi.loginWithFacebook({ accessToken });
+    await completeLogin(loggedInUser, appAccessToken, refreshToken);
+  }, [completeLogin]);
 
   const register = useCallback(async (payload: RegisterPayload) => {
     await authApi.register(payload);
@@ -68,11 +70,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isLoading: false,
       login,
       loginWithGoogle,
+      loginWithFacebook,
       register,
       logout,
       updateUser,
     }),
-    [user, login, loginWithGoogle, register, logout, updateUser],
+    [user, login, loginWithGoogle, loginWithFacebook, register, logout, updateUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -45,6 +45,10 @@ export interface GoogleLoginPayload {
   idToken: string;
 }
 
+export interface FacebookLoginPayload {
+  accessToken: string;
+}
+
 /* ── Response shapes ── */
 export interface AuthTokens {
   accessToken: string;
@@ -74,6 +78,15 @@ export const authApi = {
 
   async loginWithGoogle(payload: GoogleLoginPayload): Promise<{ user: User } & AuthTokens> {
     const res = await apiClient.post<LoginData>('/auth/google', payload, { skipAuth: true });
+    return {
+      user: mapUser(res.data.user),
+      accessToken: res.data.accessToken,
+      refreshToken: res.data.refreshToken,
+    };
+  },
+
+  async loginWithFacebook(payload: FacebookLoginPayload): Promise<{ user: User } & AuthTokens> {
+    const res = await apiClient.post<LoginData>('/auth/facebook', payload, { skipAuth: true });
     return {
       user: mapUser(res.data.user),
       accessToken: res.data.accessToken,

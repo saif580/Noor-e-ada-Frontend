@@ -8,6 +8,7 @@ export interface AuthContextValue {
   isLoading: boolean;
   login(email: string, password: string): Promise<void>;
   loginWithGoogle(idToken: string): Promise<void>;
+  loginWithFacebook(accessToken: string): Promise<void>;
   register(payload: RegisterPayload): Promise<{ needsVerification: boolean }>;
   logout(): Promise<void>;
   updateUser(user: User): void;
