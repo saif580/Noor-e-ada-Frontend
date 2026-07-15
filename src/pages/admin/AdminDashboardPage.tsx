@@ -452,13 +452,31 @@ export function AdminDashboardPage() {
     <>
       <AdminHeader eyebrow="Fulfillment" title="Orders" description="Search orders and move them through fulfillment statuses." />
       <section className="admin-panel">
-        <form className="admin-toolbar" onSubmit={(event) => { event.preventDefault(); void loadAdminData(); }}>
-          <input value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} placeholder="Order number or customer email" />
-          <select value={orderStatus} onChange={(event) => setOrderStatus(event.target.value)}>
-            <option value="">All statuses</option>
-            {orderStatuses.map((status) => <option key={status} value={status}>{status}</option>)}
-          </select>
-          <button className="button button-secondary" type="submit">Apply</button>
+        <form className="admin-toolbar admin-order-filter" onSubmit={(event) => { event.preventDefault(); void loadAdminData(); }}>
+          <label className="admin-filter-field admin-filter-search">
+            <span>Search</span>
+            <input value={orderSearch} onChange={(event) => setOrderSearch(event.target.value)} placeholder="Order number or customer email" />
+          </label>
+          <label className="admin-filter-field">
+            <span>Status</span>
+            <select value={orderStatus} onChange={(event) => setOrderStatus(event.target.value)}>
+              <option value="">All statuses</option>
+              {orderStatuses.map((status) => <option key={status} value={status}>{status}</option>)}
+            </select>
+          </label>
+          <div className="admin-filter-actions">
+            <button className="button button-secondary" type="submit">Apply filters</button>
+            <button
+              className="button button-secondary admin-filter-clear"
+              type="button"
+              onClick={() => {
+                setOrderSearch('');
+                setOrderStatus('');
+              }}
+            >
+              Clear
+            </button>
+          </div>
         </form>
         <div className="admin-table">
           {orders.map((order) => (
