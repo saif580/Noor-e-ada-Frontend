@@ -29,9 +29,14 @@ export function CategoryDetailPage() {
 
     setError('');
     try {
+      const isNumericId = /^\d+$/.test(id);
       const [freshCategory, productPage] = await Promise.all([
         catalogApi.getCategory(id),
-        catalogApi.listProducts({ categoryId: id, sort: 'newest', limit: 12 }),
+        catalogApi.listProducts(
+          isNumericId
+            ? { categoryId: id, sort: 'newest', limit: 12 }
+            : { categorySlug: id, sort: 'newest', limit: 12 },
+        ),
       ]);
       setCategory(freshCategory);
       setProducts(productPage.items);

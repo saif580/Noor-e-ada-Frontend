@@ -40,7 +40,7 @@ export function VerifyEmailPage() {
   return (
     <div className="auth-page">
       <div className="auth-card" style={{ textAlign: 'center' }}>
-        <img src={logoMark} alt="Noor-e-ada" className="auth-logo" />
+        <Link to="/"><img src={logoMark} alt="Noor-e-ada" className="auth-logo" /></Link>
 
         {status === 'verifying' && (
           <>
