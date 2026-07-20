@@ -107,7 +107,7 @@ export function RegisterPage() {
 
       {/* ── Left: brand panel ── */}
       <aside className="register-brand" aria-hidden="true">
-        <img src={logoMark} alt="Noor-e-ada" className="register-brand-logo" />
+        <a href="/" tabIndex={-1}><img src={logoMark} alt="Noor-e-ada" className="register-brand-logo" /></a>
         <h2 className="register-brand-headline">
           Your style,<br />your heritage.
         </h2>
@@ -129,7 +129,7 @@ export function RegisterPage() {
         <div className="register-form-inner">
 
           {/* Mobile-only logo */}
-          <img src={logoMark} alt="Noor-e-ada" className="register-mobile-logo" />
+          <Link to="/"><img src={logoMark} alt="Noor-e-ada" className="register-mobile-logo" /></Link>
 
           <h1 className="auth-heading" style={{ textAlign: 'left' }}>
             Create your account

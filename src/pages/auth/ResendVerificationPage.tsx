@@ -28,7 +28,7 @@ export function ResendVerificationPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <img src={logoMark} alt="Noor-e-ada" className="auth-logo" />
+        <Link to="/"><img src={logoMark} alt="Noor-e-ada" className="auth-logo" /></Link>
 
         <h1 className="auth-heading">Resend verification</h1>
         <p className="auth-sub">

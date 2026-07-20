@@ -20,7 +20,7 @@ export function ResetPasswordPage() {
     return (
       <div className="auth-page">
         <div className="auth-card" style={{ textAlign: 'center' }}>
-          <img src={logoMark} alt="Noor-e-ada" className="auth-logo" />
+          <Link to="/"><img src={logoMark} alt="Noor-e-ada" className="auth-logo" /></Link>
           <h1 className="auth-heading">Invalid link</h1>
           <Alert message="This password reset link is missing a token. Please request a new one." type="error" />
           <br />
@@ -59,7 +59,7 @@ export function ResetPasswordPage() {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        <img src={logoMark} alt="Noor-e-ada" className="auth-logo" />
+        <Link to="/"><img src={logoMark} alt="Noor-e-ada" className="auth-logo" /></Link>
 
         <h1 className="auth-heading">Set new password</h1>
         <p className="auth-sub">Choose a strong password for your account.</p>

@@ -89,7 +89,7 @@ export function LoginPage() {
 
       {/* ── Left: brand panel ── */}
       <aside className="register-brand login-brand" aria-hidden="true">
-        <img src={logoMark} alt="Noor-e-ada" className="register-brand-logo" />
+        <a href="/" tabIndex={-1}><img src={logoMark} alt="Noor-e-ada" className="register-brand-logo" /></a>
         <h2 className="register-brand-headline">
           Dressed in<br />tradition.
         </h2>
@@ -112,7 +112,7 @@ export function LoginPage() {
         <div className="register-form-inner">
 
           {/* Mobile-only logo */}
-          <img src={logoMark} alt="Noor-e-ada" className="register-mobile-logo" />
+          <Link to="/"><img src={logoMark} alt="Noor-e-ada" className="register-mobile-logo" /></Link>
 
           <h1 className="auth-heading" style={{ textAlign: 'left' }}>Welcome back</h1>
           <p className="auth-sub" style={{ textAlign: 'left', marginBottom: '28px' }}>
