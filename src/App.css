@@ -648,12 +648,20 @@
   object-fit: cover;
   object-position: center top;
   border-radius: 7px;
-  opacity: 0.22;
+}
+
+.category-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(255, 250, 243, 0.18), rgba(255, 250, 243, 0.88));
+  pointer-events: none;
 }
 
 .category-card span,
 .category-card small {
-  color: #786a60;
+  color: #5d5048;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -672,6 +680,7 @@
 
 .category-card strong {
   margin: 10px 0 18px;
+  color: #251c17;
   font-family: var(--font-display);
   font-size: 32px;
   font-weight: 500;

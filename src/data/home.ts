@@ -9,10 +9,10 @@ export const PARTICLES = [
 ] as const;
 
 export const CATEGORIES = [
-  { name: 'Festive Sarees', count: '84 styles', tone: 'rose', href: '/collections/festive-sarees', image: '/sample-products/home-banarasi-silk-saree.jpg' },
-  { name: 'Anarkali Sets', count: '52 styles', tone: 'sage', href: '/collections/anarkali-sets', image: '/sample-products/home-chikankari-anarkali-set.jpg' },
-  { name: 'Bridal Edit', count: '36 styles', tone: 'gold', href: '/collections/bridal', image: '/sample-products/home-zari-embroidered-lehenga.jpg' },
-  { name: 'Jewellery', count: '70 styles', tone: 'ivory', href: '/collections/jewellery', image: '/sample-products/home-pearl-kundan-choker.jpg' },
+  { name: 'Festive Sarees', count: '84 styles', tone: 'rose', href: '/products?sort=newest', image: '/sample-products/home-banarasi-silk-saree.jpg' },
+  { name: 'Anarkali Sets', count: '52 styles', tone: 'sage', href: '/products?sort=newest', image: '/sample-products/home-chikankari-anarkali-set.jpg' },
+  { name: 'Bridal Edit', count: '36 styles', tone: 'gold', href: '/products?sort=newest', image: '/sample-products/home-zari-embroidered-lehenga.jpg' },
+  { name: 'Jewellery', count: '70 styles', tone: 'ivory', href: '/products?sort=newest', image: '/sample-products/home-pearl-kundan-choker.jpg' },
 ] as const;
 
 export const PRODUCTS = [
