@@ -7,7 +7,7 @@ export function CollectionGrid() {
       <div className="section-heading">
         <div>
           <span className="eyebrow">Shop by category</span>
-          <h2 className="reveal">Collections made for the occasion</h2>
+          <h2>Collections made for the occasion</h2>
         </div>
         <a href="/collections">View all</a>
       </div>
@@ -17,7 +17,7 @@ export function CollectionGrid() {
           <a
             key={category.name}
             href={category.href}
-            className={`category-card ${category.tone} reveal`}
+            className={`category-card ${category.tone}`}
             style={{ '--delay': `${index * 90}ms` } as CSSProperties}
           >
             <img className="category-img" src={category.image} alt="" aria-hidden="true" loading="lazy" />
