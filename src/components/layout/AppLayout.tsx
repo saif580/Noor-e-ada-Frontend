@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { CART_UPDATED_EVENT, cartApi } from '../../api/cart';
 import { useAuth } from '../../hooks/useAuth';
 import { guestCart } from '../../lib/guestCart';
@@ -18,8 +18,7 @@ const MARQUEE_ITEMS = [
 ] as const;
 
 export function AppLayout() {
-  const { user, isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
   const location = useLocation();
 
   const [scrollPct, setScrollPct] = useState(0);
@@ -68,11 +67,6 @@ export function AppLayout() {
 
   const closeMenu = () => setMenuOpen(false);
 
-  const handleLogout = async () => {
-    await logout();
-    navigate('/login');
-  };
-
   return (
     <div className="site-shell">
       <div
@@ -100,13 +94,6 @@ export function AppLayout() {
               </span>
               <Link to="/account" className="nav-desktop-only">Account</Link>
               <Link to="/wishlist" className="nav-desktop-only">Wishlist</Link>
-              <button
-                type="button"
-                className="nav-desktop-only nav-logout-button"
-                onClick={() => void handleLogout()}
-              >
-                Sign out
-              </button>
             </>
           ) : (
             <Link to="/login" className="nav-desktop-only">Sign in</Link>
@@ -136,13 +123,6 @@ export function AppLayout() {
             <>
               <Link to="/account"  onClick={closeMenu}>Account</Link>
               <Link to="/wishlist" onClick={closeMenu}>Wishlist</Link>
-              <button
-                type="button"
-                onClick={() => { closeMenu(); void handleLogout(); }}
-                className="mobile-nav-logout"
-              >
-                Sign out
-              </button>
             </>
           ) : (
             <>
@@ -180,15 +160,6 @@ export function AppLayout() {
           {footerNavigation.map((route) => (
             <Link key={route.path} to={route.path}>{route.label}</Link>
           ))}
-          {isAuthenticated && (
-            <button
-              type="button"
-              onClick={() => void handleLogout()}
-              className="footer-logout-btn"
-            >
-              Sign out
-            </button>
-          )}
         </nav>
       </footer>
     </div>
